@@ -1,0 +1,5 @@
+# Jean-Baptiste/camembert-ner : français, F1 documenté de 0,82 sur la catégorie organisations. Choix par défaut.
+nom: Jean-Baptiste/camembert-ner
+agregation: simple
+categories: {ORG: [ORG]}      # étiquette du modèle -> catégorie retenue
+langues: [fr]

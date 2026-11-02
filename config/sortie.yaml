@@ -1,0 +1,26 @@
+# Profils de sortie (D64) : le format n'est plus figé. Chaque profil est un fichier CSV de `sorties/` ; on active ceux qu'on veut.
+# Colonnes disponibles : nom, ville, pays, score (0 à 100), bande (restitution verbale du rapport de vraisemblance),
+# calibre (« mesuré » ou « estimation étendue » : hors de la zone calibrée, le chiffre n'est pas une mesure), sources
+# (références des sources), registres, statut.
+# `resultat` : la sortie historique (une colonne NOM). `tsites` : compatibilité trouver-sites (nom;ville;pays).
+# `brut` : tout, avec score et sources.
+version: 1
+profils:
+  resultat:
+    actif: true
+    fichier: resultat.csv
+    colonnes: [nom]
+    entete: [NOM]
+    delimiteur: ","
+  tsites:
+    actif: true
+    fichier: resultat_tsites.csv
+    colonnes: [nom, ville, pays]
+    entete: [nom, ville, pays]
+    delimiteur: ";"
+  brut:
+    actif: true
+    fichier: resultat_brut.csv
+    colonnes: [nom, ville, pays, score, bande, calibre, registres, sources, statut]
+    entete: [nom, ville, pays, score, bande, calibre, registres, sources, statut]
+    delimiteur: ";"

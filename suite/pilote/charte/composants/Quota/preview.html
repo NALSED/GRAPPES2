@@ -1,0 +1,15 @@
+<!-- @dsCard group="État" height=220 subtitle="Orange à partir de 80 %, et le chiffre à côté" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.stack{display:flex;flex-direction:column;gap:14px}
+.lab{color:var(--encre-pale);display:block}
+.card{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-carte);padding:16px;display:flex;flex-direction:column;gap:12px}
+.q{display:flex;align-items:center;gap:12px}
+.n{width:230px;flex-shrink:0;color:var(--encre-douce)}
+.bar{flex:1 1 0;min-width:0;height:6px;background:var(--etat-eteint-fond);border-radius:var(--rayon-pilule);overflow:hidden}
+.fill{display:block;height:100%;border-radius:var(--rayon-pilule)}
+.p{width:44px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+</style>
+<div class="card"><span class="etiquette lab">Quota</span><div class="q"><span class="corps n">Media Cloud · 560 / 4 000 par semaine</span><div class="bar"><span class="fill" style="width:14%;background:var(--accent)"></span></div><span class="legende p" style="color:var(--encre-pale)">14 %</span></div><div class="q"><span class="corps n">Tavily · 620 / 1 000 ce mois</span><div class="bar"><span class="fill" style="width:62%;background:var(--accent)"></span></div><span class="legende p" style="color:var(--encre-pale)">62 %</span></div><div class="q"><span class="corps n">OpenSanctions · 4 120 / 5 000 ce mois</span><div class="bar"><span class="fill" style="width:82%;background:var(--etat-attention)"></span></div><span class="legende p" style="color:var(--etat-attention)">82 %</span></div><div class="q"><span class="corps n">Serper · 2 500 / 2 500 offertes</span><div class="bar"><span class="fill" style="width:100%;background:var(--etat-attention)"></span></div><span class="legende p" style="color:var(--etat-attention)">100 %</span></div></div>

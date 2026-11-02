@@ -1,0 +1,88 @@
+# Fiabilité des sources : code Admiralty (système OTAN « 6×6 », STANAG 2511 / AJP-2.1 du renseignement).
+# Aucun barème inventé. Deux notes SÉPARÉES, comme dans la norme :
+#   * FIABILITÉ DE LA SOURCE, A à F : fixée par le type de fournisseur (ce fichier) ;
+#   * CRÉDIBILITÉ DE L'INFORMATION, 1 à 6 : déduite du recoupement existant (voir `credibilite` plus bas).
+# Les poids qui en résultent sont CALCULÉS par le code (méthode ci-dessous), jamais saisis à la main.
+version: 1
+
+# Échelle de la norme (définitions officielles). La norme ne fixe AUCUN poids numérique : seulement un ordre.
+echelle:
+  A: Totalement fiable
+  B: Habituellement fiable
+  C: Assez fiable
+  D: Pas habituellement fiable
+  E: Non fiable
+  F: Fiabilité non évaluable
+
+# Du rang aux poids : « rank-order centroid » (Barron & Barrett, 1996, Management Science 42(11)), méthode publiée
+# pour tirer des poids d'un simple ordre, sans paramètre libre : le poids du rang i parmi n est
+# (1/n)·Σ_{k=i..n} 1/k. Les poids sont ensuite divisés par celui de la lettre de référence : le web générique (D)
+# garde le poids 1, qui est la pondération uniforme appliquée jusqu'ici.
+poids:
+  methode: rang_centroide
+  reference: D
+
+# Fiabilité par type de fournisseur (écosystème). A et B ne se déduisent pas de l'écosystème (voir plus bas).
+ecosystemes:
+  wikipedia: C     # encyclopédie collaborative (Wikipédia, Wikidata)
+  web: D           # web générique (pages récupérées via Tavily)
+  rss: D           # flux RSS, sauf s'il vient d'un média établi (liste plus bas)
+  x: E             # compte de réseau social : source non vérifiée
+  telegram: E
+  instagram: E
+defaut: F          # écosystème absent de la table : fiabilité non évaluable
+
+# B — agence de presse ou média établi. Liste NOMMÉE d'amorçage (critère : agence de presse, ou presse d'information
+# générale à diffusion nationale), à corriger et compléter par Sednal. Un domaine listé ici est B dans tous les
+# écosystèmes où il apparaît (page web, flux RSS).
+medias_etablis:
+  - afp.com
+  - reuters.com
+  - apnews.com
+  - lemonde.fr
+  - lefigaro.fr
+  - liberation.fr
+  - lexpress.fr
+  - lepoint.fr
+  - nouvelobs.com
+  - leparisien.fr
+  - la-croix.com
+  - humanite.fr
+  - ouest-france.fr
+  - letudiant.fr
+  - mediapart.fr
+  - courrierinternational.com
+  - franceinfo.fr
+  - francetvinfo.fr
+  - france.tv
+  - radiofrance.fr
+  - rfi.fr
+  - france24.com
+  - bfmtv.com
+  - tf1info.fr
+  - lci.fr
+
+# A — registre officiel d'État : une correspondance ACTIVE dans un registre (SIRENE, RNA, enseignement supérieur)
+# place la source en A (config/registres.yaml). Ce n'est pas un poids de plus : voir DECISIONS.md (D50 à D52).
+# La condition « au moins 2 écosystèmes » du recoupement reste SÉPARÉE et obligatoire : aucun poids, même A, ne la remplace.
+
+# Crédibilité de l'information (1 à 6), déduite des signaux déjà calculés. Valeurs de la norme :
+credibilite:
+  1: Confirmée par d'autres sources     # recoupement validé : >= 2 écosystèmes
+  2: Probablement vraie                 # rangée dans une grappe ET citée par un membre, sans recoupement complet
+  3: Possiblement vraie                 # rangée d'après son seul texte
+  4: Douteuse                           # un peu de signal, sous le seuil de classement (ou ambiguïté par la marge)
+  5: Improbable                         # contredite : ambiguïté avec une grappe OPPOSÉE
+  6: Ne peut pas être jugée             # aucun signal
+
+# Affinage à l'intérieur de D par le classement Tranco (https://tranco-list.eu, liste académique ouverte et gratuite,
+# conçue pour la recherche, résistante à la manipulation). Un domaine web générique bien classé pèse un peu plus
+# qu'un domaine absent du classement : le facteur est interpolé entre D (absent) et C (rang 1), selon le log du rang
+# (log10(rang) / log10(1 000 000)), et ne dépasse JAMAIS le facteur de C, donc jamais celui de B ou de A.
+# La liste est téléchargée UNE fois et mise en cache (renouvelée après `cache_jours`) ; son identifiant et sa date
+# sont conservés dans `<dossier>/meta.json` et repris dans le run_id. Jamais interrogée en boucle.
+tranco:
+  actif: true
+  dossier: donnees/tranco
+  cache_jours: 30
+  api: "https://tranco-list.eu/api/lists/date/{date}"

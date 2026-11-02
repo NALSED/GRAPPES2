@@ -1,0 +1,31 @@
+<!-- @dsCard group="Structure" height=340 subtitle="Modifier sur le côté, ajouter au centre" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.lab{color:var(--encre-pale);display:block}
+.two{display:flex;gap:18px;align-items:stretch}
+.half{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.scene{position:relative;height:250px;border:1px solid var(--trait);border-radius:var(--rayon-carte);
+background:var(--surface-page);overflow:hidden}
+.page{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:6px}
+.ph{height:8px;border-radius:var(--rayon-pilule);background:var(--trait)}
+.ph.w1{width:58%}.ph.w2{width:84%}.ph.w3{width:72%}.ph.w4{width:90%}.ph.w5{width:48%}
+.aside{position:absolute;top:0;right:0;bottom:0;width:62%;background:var(--surface);
+border-left:3px solid var(--accent);box-shadow:var(--ombre-panneau);padding:14px;display:flex;flex-direction:column;gap:10px}
+.voile{position:absolute;inset:0;background:rgba(20,22,26,.42)}
+.fen{position:absolute;left:50%;top:26px;transform:translateX(-50%);width:76%;background:var(--surface);
+border-radius:var(--rayon-carte);box-shadow:var(--ombre-fenetre);padding:14px;display:flex;flex-direction:column;gap:10px}
+.hd{display:flex;align-items:center;gap:8px}
+.hd .t{flex-grow:1}
+.x{display:inline-flex;background:none;border:none;padding:2px;cursor:pointer;color:var(--encre-douce)}
+.f{display:flex;flex-direction:column;gap:4px}
+.f input{height:30px;padding:0 10px;font-family:inherit;font-size:13px;color:var(--encre);
+background:var(--surface);border:1px solid var(--trait-fort);border-radius:var(--rayon-controle)}
+label{color:var(--encre-douce)}
+.ft{display:flex;gap:8px;margin-top:auto}
+.b{height:32px;padding:0 14px;border-radius:var(--rayon-controle);font-family:inherit;font-size:13px;cursor:pointer;border:1px solid transparent}
+.pr{background:var(--accent);color:#fff}
+.se{background:var(--surface);color:var(--encre);border-color:var(--trait-fort)}
+</style>
+<div class="two"><div class="half"><span class="etiquette lab">Modifier · panneau sur le côté</span><div class="scene"><div class="page"><div class="ph w1"></div><div class="ph w2"></div><div class="ph w3"></div><div class="ph w4"></div><div class="ph w5"></div><div class="ph w2"></div></div><div class="aside"><div class="hd"><span class="titre-m t">Companies House</span><button type="button" class="x" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></div><div class="f"><label class="legende" for="p-n">Nom</label><input id="p-n" type="text" value="Companies House"></div><div class="f"><label class="legende" for="p-q">Plafond</label><input id="p-q" type="text" value="5 000 par mois"></div><div class="ft"><button type="button" class="b pr">Enregistrer</button><button type="button" class="b se">Annuler</button></div></div></div></div><div class="half"><span class="etiquette lab">Ajouter · fenêtre au centre</span><div class="scene"><div class="page"><div class="ph w1"></div><div class="ph w2"></div><div class="ph w3"></div><div class="ph w4"></div><div class="ph w5"></div><div class="ph w2"></div></div><div class="voile"></div><div class="fen"><div class="hd"><span class="titre-m t">Ajouter une source</span><button type="button" class="x" aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></div><div class="f"><label class="legende" for="f-n">Nom de la source</label><input id="f-n" type="text" placeholder="Son nom"></div><div class="f"><label class="legende" for="f-c">Catégorie</label><input id="f-c" type="text" placeholder="Obligatoire"></div><div class="ft"><button type="button" class="b pr">Ajouter la source</button><button type="button" class="b se">Annuler</button></div></div></div></div></div>

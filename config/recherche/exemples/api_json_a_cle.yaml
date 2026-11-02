@@ -1,0 +1,23 @@
+# Exemple 1 : API JSON à clé. Copiez ce fichier dans config/recherche/, adaptez l'URL et les chemins,
+# ajoutez son id à `actifs` dans config/recherche.yaml et exportez la clé : export MA_CLE_API=...
+# Domaine fictif : aucun appel réel n'est fait tant que `autonome` reste faux (config/autonomie.yaml).
+id: api_json_exemple
+type: http
+public: true                      # source publique, sans identifiant de connexion
+url: https://api.exemple.test/v1/search
+method: GET
+auth: {type: header, name: X-Api-Key, env: MA_CLE_API}   # autres : query, bearer, basic, oauth_env
+params:
+  q: "{mots_cles}"
+  per_page: "{limite}"
+  page: "{page}"
+pagination: {type: page, param: page, start: 1, max_pages: 3}
+quota: 30                          # requêtes maximum par cycle pour ce fournisseur
+response: {format: json, items: data.results}
+fields:
+  title: title
+  url: {path: link, default: ""}
+  id: id
+  description: snippet
+  date: published_at
+raison: "résultat de {fournisseur} pour « {mot_cle} »"

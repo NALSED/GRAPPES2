@@ -1,0 +1,11 @@
+# Périmètre « personnes » (D64, étape 4). PRÉPARÉ, NON ACTIVÉ : tant que les étapes 1 à 3 ne sont pas mesurées, aucune
+# personne n'est collectée (`collecte: false`) et le masquage actuel (D32) reste en vigueur.
+# Données personnelles : voir docs/conception/personnes.md. Activer `collecte` est une décision de Sednal, jamais de l'agent.
+version: 1
+collecte: false                  # interrupteur général. Faux : aucune personne n'est cherchée ni extraite.
+perimetre: roles_publics         # roles_publics (défaut) | aucune. JAMAIS « tous » : les particuliers sont hors périmètre.
+roles_publics:                   # seuls cas admis quand `perimetre: roles_publics` et `collecte: true`
+  - dirigeant_registre           # dirigeant inscrit à un registre officiel (SIRENE/RNA), pour la structure qu'il dirige
+  - porte_parole_cite            # porte-parole nommé comme tel dans un texte, au nom d'une structure
+  - compte_public_structure      # compte public qui s'exprime au nom d'une structure
+masquage: true                   # le masquage actuel des personnes physiques (resultat.csv, D32) reste disponible et actif

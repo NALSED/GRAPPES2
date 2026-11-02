@@ -1,0 +1,14 @@
+# Service utilisateur systemd : un cycle de la boucle automatique.
+# Installation (par Sednal, une fois) :
+#   mkdir -p ~/.config/systemd/user
+#   cp outils/systemd/grappes-cycle.* ~/.config/systemd/user/    # puis adapter WorkingDirectory/ExecStart
+#   systemctl --user daemon-reload && systemctl --user enable --now grappes-cycle.timer
+# Tant que `autonome` est faux (config/autonomie.yaml), chaque exécution n'est qu'une simulation.
+[Unit]
+Description=Grappes : un cycle de la boucle automatique
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/grappes
+ExecStart=/opt/grappes/outils/cycle.sh
+# Le verrou (donnees/cycle.lock) empêche deux cycles simultanés ; le fichier donnees/STOP arrête tout.

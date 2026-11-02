@@ -1,0 +1,5 @@
+{"message_id": 7, "channel": "@Canal_Cuisine", "date": "2026-03-02T08:30:00+00:00", "text": "Nouvelle recette #cuisine via @Chef_Demo", "forwarded_from": "@Canal_Jardin", "entities": [{"type": "url", "url": "https://Exemple-B.test/page/"}, {"type": "mention", "text": "@Chef_Demo"}], "views": 120, "reactions": 5}
+{"message_id": 8, "channel": "canal_jardin", "date": 1772445000, "text": "Semis de printemps"}
+{"message_id": 7, "channel": "@canal_cuisine", "date": "2026-03-02T08:30:00+00:00", "text": "Nouvelle recette #cuisine via @Chef_Demo"}
+{"message_id": 9, "text": "canal absent"}
+{"channel": "@canal_vide"}

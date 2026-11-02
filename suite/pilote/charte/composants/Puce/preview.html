@@ -1,0 +1,20 @@
+<!-- @dsCard group="Contrôles" height=280 subtitle="Puce de choix, et case d'une source" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.stack{display:flex;flex-direction:column;gap:14px}
+.lab{color:var(--encre-pale);display:block}
+.card{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-carte);padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.ch{height:34px;padding:0 14px;border-radius:var(--rayon-pilule);font-family:inherit;cursor:pointer}
+.ch.on{background:var(--accent-fond);color:var(--accent-encre);border:1px solid var(--accent);font-weight:600}
+.ch.off{background:var(--surface);color:var(--encre);border:1px solid var(--trait-fort)}
+.ck{display:flex;align-items:center;gap:8px;background:none;border:none;padding:6px 4px;cursor:pointer;font-family:inherit;text-align:left;width:260px}
+.bx{width:18px;height:18px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;
+border:1px solid var(--trait-fort);border-radius:4px;background:var(--surface)}
+.bx.on{background:var(--accent);border-color:var(--accent)}
+.off{color:var(--encre-pale)}
+.dd{color:var(--encre-pale);margin-left:auto}
+</style>
+<div class="stack"><div class="card"><span class="etiquette lab">Puce de choix · plusieurs à la fois</span><div class="row"><button type="button" class="ch on controle">Entreprises</button><button type="button" class="ch on controle">Associations</button><button type="button" class="ch on controle">Presse</button><button type="button" class="ch off controle">Web</button><button type="button" class="ch off controle">Lieux</button></div></div><div class="card"><span class="etiquette lab">Case d'une source dans un préréglage</span><button type="button" class="ck" aria-pressed="true"><span class="bx on"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="corps">Companies House</span><span class="legende dd">Royaume-Uni</span></button><button type="button" class="ck" aria-pressed="false"><span class="bx"></span><span class="corps off">OpenSanctions</span><span class="legende dd">Mondial</span></button></div></div>

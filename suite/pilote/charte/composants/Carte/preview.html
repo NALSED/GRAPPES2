@@ -1,0 +1,18 @@
+<!-- @dsCard group="Structure" height=300 subtitle="Repliable, avec le trait accent quand elle est ouverte" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.stack{display:flex;flex-direction:column;gap:14px}
+.lab{color:var(--encre-pale);display:block}
+.c{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-carte);overflow:hidden}
+.c.open{box-shadow:var(--ombre-carte);border-left:3px solid var(--accent)}
+.h{width:100%;display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface-creuse);
+border:none;font-family:inherit;cursor:pointer;text-align:left;color:var(--encre)}
+.ch{display:inline-flex;flex-shrink:0;color:var(--encre-douce)}
+.ch.shut{transform:rotate(-90deg)}
+.t{flex-grow:1}
+.cnt{color:var(--encre-pale)}
+.b{padding:16px 18px;border-top:1px solid var(--trait);display:flex;flex-direction:column;gap:8px;color:var(--encre-douce)}
+</style>
+<div class="stack"><div class="c open"><button type="button" class="h"><span class="ch"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span><span class="titre-s t">Entreprises</span><span class="legende cnt">7 sources · 5 allumées</span></button><div class="b"><span class="corps">Le contenu de la carte. Une seule carte ouverte par écran la plupart du temps, et le trait accent à gauche dit laquelle.</span></div></div><div class="c"><button type="button" class="h"><span class="ch shut"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span><span class="titre-s t">Associations</span><span class="legende cnt">8 sources · 4 allumées</span></button></div><div class="c"><button type="button" class="h"><span class="ch shut"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span><span class="titre-s t">Presse</span><span class="legende cnt">5 sources · 5 allumées</span></button></div></div>

@@ -1,0 +1,39 @@
+# Indice de fiabilité unique (D64, étape 3) : rapport de vraisemblance, cadre ENFSI (guide européen pour le rapport
+# évaluatif en science forensique).
+#
+# Deux propositions opposées : H1 « cette entité est un acteur réel du sujet », H2 « elle ne l'est pas ».
+# Chaque élément d'observation est ramené à un rapport de vraisemblance  LR = P(observation | H1) / P(observation | H2)
+# (jamais l'inverse : on calcule la probabilité de l'observation SACHANT la proposition). Tout est exprimé en log10(LR).
+# Les LR se multiplient (les log10 s'additionnent) sous l'hypothèse, annoncée, d'éléments indépendants : c'est pourquoi
+# une seule voix par éditeur est comptée et pourquoi chaque élément et le total sont bornés.
+#
+# Valeurs de départ = RAISONNEMENT STRUCTURÉ D'EXPERT ; puis RÉGLÉES par Optuna sur le jeu de mise au point (étude
+# etape3-dev-v1, 108 essais, 2026-10-12, sans Wikidata ; docs/conception/calibration.md § 8). `registre_wikidata` reste la
+# valeur d'expert : non mesurable sur une référence Wikidata (circulaire). La calibration (config/calibration.json) dit
+# si l'indice est une probabilité mesurée ou une estimation étendue. Le poids de la source (catégorie Admiralty) multiplie chaque élément :
+# poids de la lettre = facteur de la lettre / facteur de A (A = 1, F = 0,07).
+version: 1
+bornes:
+  par_element: 3.0      # un seul élément ne peut pas dépasser ±3 (LR 1000 : « soutien fort »)
+  total: 6.0            # le total est borné à ±6 (LR 10^6 : « extrêmement fort »)
+elements:
+  registre_wikidata: 2.0      # membre de la classe du sujet dans Wikidata. Non mesurable sur notre référence (circulaire) : valeur d'expert annoncée
+  registre_source: 0.19         # toute autre prise YAML de config/recherche/ (data.gouv.fr, D68) : valeur d'EXPERT, égale à SIRENE par code d'activité, non mesurée
+  registre_sirene_naf: 0.190    # SIRENE/RNA, code d'activité qui recouvre le sujet (l'existence est attestée, l'appartenance l'est moins : D51)
+  registre_sirene_nom: 0.112    # SIRENE/RNA, trouvé par nom seulement
+  nom_dans_texte: 1.901         # par éditeur distinct qui nomme l'organisation (modèle ORG), × poids Admiralty de l'éditeur × confiance du modèle
+  nom_dans_texte_plafond: 2.792
+  proximite_pente: 3.358        # source avec texte propre : log10 LR = pente × (S − pivot), S = proximité sémantique 0..1 (négatif si S < pivot)
+  proximite_pivot: 0.566
+  ecosysteme: 1.149             # par écosystème distinct au-delà du premier qui cite l'entité
+  citation: 0.969               # par éditeur distinct qui la cite, × poids de sa source
+  citation_plafond: 2.718
+# Restitution verbale (ENFSI 2015) : bornes sur LR (non log) ; symétrique pour les LR < 1 (soutien à H2).
+bandes:
+  - {borne: 1.0, libelle: "aucun apport"}
+  - {borne: 10.0, libelle: "soutien faible"}
+  - {borne: 100.0, libelle: "soutien modéré"}
+  - {borne: 1000.0, libelle: "soutien assez fort"}
+  - {borne: 10000.0, libelle: "soutien fort"}
+  - {borne: 1000000.0, libelle: "soutien très fort"}
+  - {borne: .inf, libelle: "soutien extrêmement fort"}

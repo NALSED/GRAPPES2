@@ -1,0 +1,7 @@
+# Table d'équivalence des canaux Telegram (D25) : nom affiché -> identifiant public.
+# L'export Telegram Desktop ne donne que le nom affiché ; cette table est la référence.
+# Sans entrée, l'identifiant est déduit du nom (minuscules, accents ôtés, espaces -> « _ ») et marqué
+# « hypothèse » : ses citations sont conservées mais ne valident jamais un recoupement. Deux canaux
+# de même nom affiché ne sont jamais fusionnés. Casse, accents et ponctuation sont ignorés à la recherche.
+equivalences: {}
+#  "Canal Démo A": canal_demo_a

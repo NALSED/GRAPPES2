@@ -1,0 +1,19 @@
+# Licences et demandes de licences d'entrepreneurs de spectacles vivants (Ministère de la Culture). Source : catalogue
+# data.gouv.fr, jeu 5fc9b4729dbf684fecb13bae, ressource CSV fb6c3b2e-da8c-4e69-a719-6a96329e4cb2 (compagnies, troupes,
+# ensembles, lieux déclarés). Fichier téléchargé une fois, filtré en local sur la raison sociale et le nom du lieu.
+id: culture_spectacles
+type: registre
+public: true
+description: "Entrepreneurs de spectacles vivants déclarés (Ministère de la Culture)"
+url: https://ministere-culture.s3.sbg.io.cloud.ovh.net/ESPACE_LICENCES/exportDataGouv_EspaceLicence.csv
+format: csv
+delimiter: ";"
+encoding: latin-1
+colonnes_recherche: [raison_sociale, nom_lieu]
+fields:
+  nom: raison_sociale
+  id: numero_recepisse
+  siren: siren_siret
+  type: code_naf_ape  # activité principale du titulaire ; sert au vérificateur de type (D69)
+  nature: type_declarant  # « Personne physique... » écartée : la cible est une organisation (D69)
+relaxation: 2

@@ -1,0 +1,12 @@
+# Reconnaissance de noms dans le texte (D63, chantier 2) : crée de NOUVELLES entités (organisations) à partir des textes lus.
+# Modèles existants et éprouvés, branchés en multiprise comme la recherche : un fichier par modèle dans `ner/`, les
+# `actifs` en lancent plusieurs ; changer de modèle = changer cette liste, jamais le code.
+# Installation : `pip install -e .[ner]`, puis les poids se téléchargent au premier usage dans `modeles_dir`.
+version: 1
+actifs: [camembert_ner]      # ou [wikineural] pour un sujet dans une autre langue ; ou les deux
+seuil_confiance: 0.93        # D65 : mesuré sur dev et validation, 0.93 retire 18 % des faux sans perdre une seule bonne réponse (0.85 : 1875 faux ; 0.93 : 1528) ; au-delà on perd des bonnes réponses
+morceau_caracteres: 1200     # texte découpé en morceaux (limite de 512 jetons des modèles), coupe à la fin d'une phrase
+mots_max: 8                  # un nom d'organisation plus long est une phrase, pas un nom
+mots_min_longueur: 3         # caractères minimum d'un nom
+min_pages: 1                 # nombre minimal de pages distinctes qui nomment l'entité pour la retenir
+modeles_dir: donnees/modeles

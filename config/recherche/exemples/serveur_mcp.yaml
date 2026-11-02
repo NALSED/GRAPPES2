@@ -1,0 +1,18 @@
+# Exemple 3 : serveur MCP externe appelé comme un fournisseur (transport stdio ou http).
+# Distinct du serveur MCP en lecture seule de grappes. La commande est définie par l'opérateur ;
+# les secrets passent par les variables d'environnement listées dans `env`.
+id: serveur_mcp_exemple
+type: mcp
+transport:
+  type: stdio                       # ou : {type: http, url: "https://mcp.exemple.test/mcp", headers_env: {Authorization: MCP_JETON}}
+  command: /chemin/vers/serveur-mcp
+  args: ["--lecture-seule"]
+  env: []
+tool: rechercher                    # outil à appeler
+arguments: {requete: "{mots_cles}", nombre: "{limite}"}
+timeout_s: 30
+response: {items: resultats}        # le résultat doit être du JSON ; chemins comme pour `type: http`
+fields:
+  title: nom
+  url: lien
+  description: resume

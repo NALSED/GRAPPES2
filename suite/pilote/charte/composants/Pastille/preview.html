@@ -1,0 +1,16 @@
+<!-- @dsCard group="État" height=200 subtitle="Trois états, et la pastille n'est jamais seule" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.stack{display:flex;flex-direction:column;gap:14px}
+.lab{color:var(--encre-pale);display:block}
+.card{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-carte);padding:16px;display:flex;flex-direction:column;gap:12px}
+.r{display:flex;align-items:center;gap:8px}
+.p{width:10px;height:10px;border-radius:var(--rayon-rond);flex-shrink:0}
+.m{min-width:132px}
+.d{color:var(--encre-pale)}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pil{font-size:11px;font-weight:600;letter-spacing:.02em;padding:3px 10px;border-radius:var(--rayon-pilule)}
+</style>
+<div class="stack"><div class="card"><span class="etiquette lab">Dans une ligne</span><div class="r"><span class="p" style="background:var(--etat-ok)"></span><span class="corps m">opérationnelle</span><span class="legende d">Testée avec succès, elle répond.</span></div><div class="r"><span class="p" style="background:var(--etat-attention)"></span><span class="corps m">à vérifier</span><span class="legende d">Jamais testée, ou son dernier test a échoué.</span></div><div class="r"><span class="p" style="background:var(--etat-eteint)"></span><span class="corps m">éteinte</span><span class="legende d">Volontairement mise de côté, elle n'est pas interrogée.</span></div></div><div class="card"><span class="etiquette lab">En étiquette, dans un panneau</span><div class="pills"><span class="pil" style="background:var(--etat-ok-fond);color:var(--etat-ok-encre)">opérationnelle</span><span class="pil" style="background:var(--etat-attention-fond);color:var(--etat-attention)">à vérifier</span><span class="pil" style="background:var(--etat-eteint-fond);color:var(--encre-douce)">éteinte</span></div></div></div>

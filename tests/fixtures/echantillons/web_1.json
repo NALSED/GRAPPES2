@@ -1,0 +1,28 @@
+[
+  {
+    "url": "https://exemple-a.example.test/articles/jardin-1?utm_source=newsletter",
+    "canonical_url": "https://exemple-a.example.test/articles/jardin-1",
+    "fetched_at": "2026-09-05T06:00:00Z",
+    "published_at": "2026-09-02T07:00:00Z",
+    "title": "Jardinage d'automne : les bases",
+    "lang": "fr",
+    "text": "Le jardinage d'automne demande peu de matériel. Voir aussi la chaîne https://t.me/canal_demo_a et le compte https://x.com/compte_demo_a pour les nouveautés.",
+    "links": [
+      {"href": "https://t.me/canal_demo_a", "anchor": "notre chaîne"},
+      {"href": "https://x.com/compte_demo_a", "anchor": "notre compte"},
+      {"href": "https://exemple-b.example.test/", "anchor": "site partenaire"}
+    ]
+  },
+  {
+    "url": "https://exemple-b.example.test/accueil",
+    "canonical_url": "https://exemple-b.example.test/accueil",
+    "fetched_at": "2026-09-05T06:05:00Z",
+    "title": "Accueil du site B",
+    "lang": "fr",
+    "text": "Bienvenue sur le site B. Retrouvez-nous sur https://www.instagram.com/compte_demo_c/ et lisez https://exemple-a.example.test/articles/jardin-1.",
+    "links": [
+      {"href": "https://www.instagram.com/compte_demo_c/", "anchor": "Instagram"},
+      {"href": "https://exemple-a.example.test/articles/jardin-1", "anchor": "article"}
+    ]
+  }
+]

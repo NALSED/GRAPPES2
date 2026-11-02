@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Pilote grappes — Recherche</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --surface: #FFFFFF;
+  --surface-page: #F2F3F5;
+  --surface-creuse: #F7F8F9;
+  --trait: #E3E5E8;
+  --trait-fort: #868C94;
+  --encre: #1A1C1F;
+  --encre-douce: #5C6168;
+  --encre-pale: #696F78;
+  --accent: #2563A8;
+  --accent-fond: #E8EFF8;
+  --accent-encre: #1F4F85;
+  --sur-accent: #FFFFFF;
+  --etat-ok: #1E7F4F;
+  --etat-ok-fond: #EAF3EC;
+  --etat-ok-encre: #1E6340;
+  --etat-attention: #8A5209;
+  --etat-attention-fond: #FBF0E4;
+  --etat-eteint: #868C94;
+  --etat-eteint-fond: #ECEEF1;
+  --danger: #8A3324;
+  --danger-fond: #FAEFE6;
+  --role-chercher: #1F4F85;        --role-chercher-fond: #E8EFF8;
+  --role-verifier: #1E6340;        --role-verifier-fond: #EAF3EC;
+  --role-enrichir: #5B3E82;        --role-enrichir-fond: #F3EEF8;
+  --role-catalogue: #7A4E12;       --role-catalogue-fond: #FBF0E4;
+  --role-outil: #3E444C;           --role-outil-fond: #ECEEF1;
+  --role-rapprocher: #1F5A61;      --role-rapprocher-fond: #E7F2F3;
+  --rayon-controle: 6px;
+  --rayon-carte: 10px;
+  --rayon-tuile: 14px;
+  --rayon-pilule: 999px;
+  --rayon-rond: 50%;
+  --ombre-posee: 0 1px 2px rgba(20, 22, 26, 0.08);
+  --ombre-carte: 0 1px 3px rgba(20, 22, 26, 0.07);
+  --ombre-panneau: 0 2px 12px rgba(20, 22, 26, 0.10);
+  --ombre-fenetre: 0 12px 40px rgba(20, 22, 26, 0.30);
+}
+body { margin: 0; font-family: "IBM Plex Sans", system-ui, sans-serif; background: var(--surface-page); color: var(--encre); }
+a { color: var(--accent-encre); }
+a:hover { color: var(--accent); }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</helmet>
+
+<div style="min-height: 100%">
+
+  <nav style="background: var(--surface); border-bottom: 1px solid var(--trait)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 32px; display: flex; align-items: stretch; gap: 8px; height: 56px">
+      <span style="display: flex; align-items: center; font-size: 15px; font-weight: 600; margin-right: 24px">Grappes</span>
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <span style="{{t.style}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.icon}}"/></svg>{{t.label}}<sc-if value="{{t.later}}" hint-placeholder-val="{{false}}"><span style="font-size: 11px; font-weight: 500; margin-left: 8px; padding: 2px 8px; border-radius: var(--rayon-pilule); background: var(--surface-page); color: var(--encre-pale)">plus tard</span></sc-if></span>
+      </sc-for>
+    </div>
+  </nav>
+
+  <div style="padding: 36px 32px 72px">
+    <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Recherche</h1>
+        <p style="margin: 0; font-size: 14px; color: var(--encre-douce)">Chaque recherche lancée est sauvegardée en bas de page.</p>
+      </div>
+
+      <!-- ============ RECHERCHE SIMPLE ============ -->
+      <div style="{{sA.cardStyle}}">
+        <button type="button" onClick="{{sA.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 18px 22px; background: none; border: none; text-align: left; cursor: pointer">
+          <span style="{{sA.chev}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+          <span style="font-size: 17px; font-weight: 600; flex-grow: 1">Recherche simple</span>
+          <span style="font-size: 13px; color: var(--encre-douce); background: var(--surface-page); border-radius: var(--rayon-pilule); padding: 4px 12px">{{sA.summary}}</span>
+        </button>
+        <sc-if value="{{sA.open}}" hint-placeholder-val="{{true}}">
+          <div style="border-top: 1px solid var(--trait); padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 24px">
+
+            <div style="display: flex; flex-direction: column; gap: 6px; max-width: 460px">
+              <span style="font-size: 13px; font-weight: 600">Préréglage</span>
+              <div style="position: relative">
+                <button type="button" onClick="{{ddToggle}}" aria-haspopup="listbox" style="width: 100%; height: 44px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; font-size: 15px; font-weight: 500; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">
+                  <span>{{cur.name}}</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>
+                </button>
+                <sc-if value="{{ddOpen}}" hint-placeholder-val="{{false}}">
+                  <div style="position: absolute; top: 48px; left: 0; right: 0; z-index: 5; background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-carte); box-shadow: 0 8px 24px rgba(20,22,26,0.16); padding: 6px; display: flex; flex-direction: column; gap: 2px">
+                    <sc-for list="{{presetOpts}}" as="p" hint-placeholder-count="8">
+                      <button type="button" onClick="{{p.pick}}" style="{{p.style}}">
+                        <span style="font-size: 14px; font-weight: 500">{{p.name}}</span>
+                        <span style="font-size: 12px; color: var(--encre-pale)">{{p.count}}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+              <span style="font-size: 12px; color: var(--encre-douce)">{{cur.hint}}</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="q" style="font-size: 13px; font-weight: 600">Que cherches-tu ?</label>
+              <input id="q" type="search" placeholder="{{cur.placeholder}}" style="height: 44px; box-sizing: border-box; padding: 0 14px; font-size: 15px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 28px">
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="font-size: 13px; font-weight: 600">Pays</span>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                  <sc-for list="{{paysChips}}" as="c" hint-placeholder-count="5">
+                    <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-size: 13px; font-weight: 600">Sources du préréglage</span>
+                  <sc-if value="{{showMod}}" hint-placeholder-val="{{false}}">
+                    <span style="font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--rayon-pilule); background: var(--etat-attention-fond); color: var(--etat-attention)">{{curMod}}</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{showMod}}" hint-placeholder-val="{{false}}">
+                  <button type="button" onClick="{{resetCur}}" style="height: 30px; padding: 0 12px; font-size: 12px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Remettre par défaut</button>
+                </sc-if>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+                <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+                  <div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 12px; border-radius: var(--rayon-carte); min-width: 0; background: var(--surface-creuse); border: 1px solid var(--trait)">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 4px">
+                      <span style="{{s.flagStyle}}">{{s.flag}}</span>
+                      <span style="font-size: 12px; color: var(--encre-douce); font-variant-numeric: tabular-nums">{{s.count}}</span>
+                    </div>
+                    <sc-for list="{{s.rows}}" as="r" hint-placeholder-count="4">
+                      <button type="button" role="checkbox" aria-checked="{{r.aria}}" onClick="{{r.toggle}}" style="{{r.style}}">
+                        <span style="{{r.boxStyle}}">{{r.tick}}</span>
+                        <span style="font-size: 13px; flex-grow: 1; text-align: left; line-height: 1.3; min-width: 0">{{r.nom}}</span>
+                        <span style="font-size: 11px; color: var(--encre-pale); flex-shrink: 0">{{r.pays}}</span>
+                      </button>
+                    </sc-for>
+                    <sc-if value="{{s.empty}}" hint-placeholder-val="{{false}}">
+                      <span style="font-size: 12px; color: var(--encre-pale); padding: 4px">aucune source</span>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">Tes coches sont gardées dans le préréglage. La vérification ne tourne que si tu coches une source de la colonne Vérifier.</span>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 18px; border-top: 1px solid var(--trait)">
+              <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+                <span style="font-size: 13px; color: var(--encre)">Coût estimé : <strong style="font-weight: 600">{{cur.cost}}</strong></span>
+                <span style="font-size: 12px; color: var(--encre-douce)">{{cur.quota}}</span>
+              </div>
+              <button type="button" onClick="{{launchSimple}}" style="height: 44px; padding: 0 26px; font-size: 15px; font-weight: 500; color: var(--sur-accent); background: {{accent}}; border: none; border-radius: var(--rayon-controle); cursor: pointer">Lancer la recherche</button>
+            </div>
+
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- ============ RECHERCHE AVANCÉE ============ -->
+      <div style="{{sB.cardStyle}}">
+        <button type="button" onClick="{{sB.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 18px 22px; background: none; border: none; text-align: left; cursor: pointer">
+          <span style="{{sB.chev}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+          <span style="font-size: 17px; font-weight: 600; flex-grow: 1">Recherche avancée</span>
+          <span style="font-size: 13px; color: var(--encre-douce); background: var(--surface-page); border-radius: var(--rayon-pilule); padding: 4px 12px">{{sB.summary}}</span>
+        </button>
+        <sc-if value="{{sB.open}}" hint-placeholder-val="{{false}}">
+          <div style="border-top: 1px solid var(--trait); padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 14px">
+
+            <!-- 1. préréglages -->
+            <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); overflow: hidden">
+              <button type="button" onClick="{{iP.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--surface-creuse); border: none; text-align: left; cursor: pointer">
+                <span style="{{iP.chev}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+                <span style="font-size: 15px; font-weight: 600; flex-grow: 1">Utiliser plusieurs préréglages</span>
+                <span style="font-size: 12px; color: var(--encre-douce)">{{iP.summary}}</span>
+              </button>
+              <sc-if value="{{iP.open}}" hint-placeholder-val="{{true}}">
+                <div style="padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--trait)">
+                  <div style="display: flex; flex-direction: column; gap: 8px">
+                    <span style="font-size: 13px; font-weight: 600">Catégories</span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                      <sc-for list="{{catChips}}" as="c" hint-placeholder-count="8">
+                        <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 10px">
+                    <span style="font-size: 13px; font-weight: 600">Une saisie par catégorie</span>
+                    <sc-for list="{{queryRows}}" as="r" hint-placeholder-count="3">
+                      <div style="display: flex; flex-direction: column; gap: 8px">
+                        <div style="display: grid; grid-template-columns: 190px minmax(0, 1fr) auto; gap: 14px; align-items: center">
+                          <label for="{{r.qid}}" style="font-size: 14px; font-weight: 500">{{r.name}}</label>
+                          <input id="{{r.qid}}" type="search" placeholder="{{r.placeholder}}" style="height: 40px; box-sizing: border-box; padding: 0 14px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+                          <button type="button" onClick="{{r.toggleExp}}" style="height: 40px; padding: 0 14px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; white-space: nowrap">Sources · {{r.srcSummary}}</button>
+                        </div>
+                        <sc-if value="{{r.expanded}}" hint-placeholder-val="{{false}}">
+                          <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 8px 204px">
+                            <sc-for list="{{r.srcChips}}" as="c" hint-placeholder-count="5">
+                              <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{noBranch}}" hint-placeholder-val="{{false}}">
+                      <span style="font-size: 13px; color: var(--encre-pale)">Choisis au moins une catégorie.</span>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- 2. plan de travail -->
+            <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); overflow: hidden">
+              <button type="button" onClick="{{iN.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--surface-creuse); border: none; text-align: left; cursor: pointer">
+                <span style="{{iN.chev}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+                <span style="font-size: 15px; font-weight: 600; flex-grow: 1">Plan de travail</span>
+                <span style="font-size: 12px; color: var(--encre-douce)">{{iN.summary}}</span>
+              </button>
+              <sc-if value="{{iN.open}}" hint-placeholder-val="{{true}}">
+                <div style="padding: 18px 20px 22px; border-top: 1px solid var(--trait); display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 18px; align-items: flex-start">
+
+                  <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); padding: 14px 12px; display: flex; flex-direction: column; gap: 8px">
+                    <div style="display: flex; flex-direction: column; gap: 3px; padding: 0 4px 6px">
+                      <span style="font-size: 14px; font-weight: 600">Briques</span>
+                      <span style="font-size: 12px; line-height: 1.45; color: var(--encre-douce)">Celles allumées dans Réglages. Un clic pose la brique sur le plan, sans lien. Tu la déplaces, puis tu la relies.</span>
+                    </div>
+                    <sc-for list="{{groups}}" as="g" hint-placeholder-count="9">
+                      <div style="border-top: 1px solid var(--trait); padding-top: 6px">
+                        <button type="button" onClick="{{g.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 6px 4px; background: none; border: none; cursor: pointer; text-align: left">
+                          <span style="{{g.chevStyle}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+                          <span style="font-size: 13px; font-weight: 600; flex-grow: 1">{{g.name}}</span>
+                          <span style="font-size: 12px; color: var(--encre-pale)">{{g.count}}</span>
+                        </button>
+                        <sc-if value="{{g.open}}" hint-placeholder-val="{{false}}">
+                          <div style="display: flex; flex-direction: column; gap: 2px; padding: 2px 0 6px">
+                            <sc-for list="{{g.items}}" as="it" hint-placeholder-count="5">
+                              <button type="button" onClick="{{it.add}}" style="{{it.style}}">
+                                <span style="font-size: 13px; flex-grow: 1; text-align: left">{{it.nom}}</span>
+                                <span style="{{it.markStyle}}">{{it.mark}}</span>
+                              </button>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0">
+
+                    <div style="display: flex; flex-direction: column; gap: 8px">
+                    <div style="position: relative">
+                      <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); overflow: auto; max-height: 660px; background-color: var(--surface-creuse); background-image: radial-gradient(var(--trait-fort) 1px, transparent 1px); background-size: 18px 18px">
+                        <div data-cv="1" onMouseDown="{{cv.bgDown}}" onMouseMove="{{cv.move}}" onMouseUp="{{cv.up}}" onMouseLeave="{{cv.leave}}" style="position: relative; width: {{cv.w}}px; height: {{cv.h}}px; user-select: none">
+
+                          <sc-for list="{{cv.edges}}" as="k" hint-placeholder-count="12">
+                            <svg width="{{cv.w}}" height="{{cv.h}}" style="position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible" aria-hidden="true">
+                              <path d="{{k.d}}" fill="none" stroke="{{k.color}}" stroke-width="{{k.sw}}" stroke-linecap="round"/>
+                              <path d="{{k.d}}" fill="none" stroke="transparent" stroke-width="16" style="pointer-events: stroke; cursor: pointer" onClick="{{k.pick}}"/>
+                            </svg>
+                          </sc-for>
+
+                          <sc-if value="{{cv.tmp.show}}" hint-placeholder-val="{{false}}">
+                            <svg width="{{cv.w}}" height="{{cv.h}}" style="position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible" aria-hidden="true">
+                              <path d="{{cv.tmp.d}}" fill="none" stroke="var(--trait-fort)" stroke-width="1.6" stroke-dasharray="5 4" stroke-linecap="round"/>
+                            </svg>
+                          </sc-if>
+
+                          <sc-if value="{{cv.edgeBtn.show}}" hint-placeholder-val="{{false}}">
+                            <button type="button" onClick="{{cv.edgeBtn.del}}" style="{{cv.edgeBtn.style}}">Retirer le lien</button>
+                          </sc-if>
+
+                          <sc-for list="{{cv.nodes}}" as="n" hint-placeholder-count="10">
+                            <div onMouseDown="{{n.down}}" onMouseUp="{{n.up}}" style="{{n.wrapStyle}}">
+                              <div style="{{n.tileStyle}}">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{n.color}}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"/></svg>
+                                <sc-if value="{{n.hasIn}}" hint-placeholder-val="{{true}}">
+                                  <span style="position: absolute; left: -7px; top: 25px; width: 14px; height: 14px; box-sizing: border-box; border-radius: var(--rayon-rond); background: var(--surface); border: 1.5px solid var(--trait-fort)" aria-hidden="true"></span>
+                                </sc-if>
+                                <sc-if value="{{n.hasOut}}" hint-placeholder-val="{{true}}">
+                                  <button type="button" onMouseDown="{{n.portDown}}" aria-label="Relier {{n.nom}} à une autre tuile" style="position: absolute; right: -7px; top: 25px; width: 14px; height: 14px; padding: 0; box-sizing: border-box; border-radius: var(--rayon-rond); background: var(--surface); border: 1.5px solid var(--trait-fort); cursor: crosshair"></button>
+                                </sc-if>
+                                <sc-if value="{{n.showRemove}}" hint-placeholder-val="{{false}}">
+                                  <button type="button" onMouseDown="{{n.stop}}" onClick="{{n.remove}}" aria-label="Retirer {{n.nom}}" style="position: absolute; right: -9px; top: -9px; width: 20px; height: 20px; padding: 0; font-size: 13px; line-height: 1; color: var(--encre-douce); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-rond); cursor: pointer; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+                                </sc-if>
+                              </div>
+                              <span style="font-size: 13px; font-weight: 600; line-height: 1.25; text-align: center; max-width: 130px">{{n.nom}}</span>
+                              <span style="font-size: 11px; color: var(--encre-pale); margin-top: -6px">{{n.sub}}</span>
+                            </div>
+                          </sc-for>
+
+                        </div>
+                      </div>
+                      <div style="position: absolute; top: 12px; right: 14px; display: flex; gap: 8px">
+                        <button type="button" onClick="{{cv.tidy}}" style="height: 34px; padding: 0 14px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; box-shadow: 0 1px 3px rgba(20,22,26,0.12)">Ranger</button>
+                      </div>
+                      <button type="button" onClick="{{launchAdv}}" style="position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); height: 40px; padding: 0 22px; font-size: 14px; font-weight: 500; color: var(--sur-accent); background: {{accent}}; border: none; border-radius: var(--rayon-controle); cursor: pointer; box-shadow: 0 2px 8px rgba(20,22,26,0.25)">Lancer la recherche</button>
+                    </div>
+                    <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">Glisse une tuile pour la déplacer. Pose d'abord les tuiles depuis la colonne de gauche, puis tire le rond de droite d'une tuile vers une autre pour les relier. Clique sur un lien pour le supprimer.</span>
+                    </div>
+
+                    <span style="font-size: 12px; color: var(--encre-douce)">Clique sur une tuile : tu règles ce qui entre, ce qui sort et la tuile elle-même.</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 6px">
+              <span style="font-size: 13px; color: var(--encre-douce)">{{advLine}}</span>
+              <button type="button" onClick="{{launchAdv}}" style="height: 44px; padding: 0 26px; font-size: 15px; font-weight: 500; color: var(--sur-accent); background: {{accent}}; border: none; border-radius: var(--rayon-controle); cursor: pointer">Lancer la recherche</button>
+            </div>
+
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- ============ RECHERCHES SAUVEGARDÉES ============ -->
+      <div style="{{sC.cardStyle}}">
+        <button type="button" onClick="{{sC.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 18px 22px; background: none; border: none; text-align: left; cursor: pointer">
+          <span style="{{sC.chev}}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+          <span style="font-size: 17px; font-weight: 600; flex-grow: 1">Recherches sauvegardées</span>
+          <span style="font-size: 13px; color: var(--encre-douce); background: var(--surface-page); border-radius: var(--rayon-pilule); padding: 4px 12px">{{sC.summary}}</span>
+        </button>
+        <sc-if value="{{sC.open}}" hint-placeholder-val="{{true}}">
+          <div style="border-top: 1px solid var(--trait); padding: 8px 14px 14px">
+            <sc-for list="{{saved}}" as="s" hint-placeholder-count="4">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 8px; border-bottom: 1px solid var(--trait)">
+                <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+                    <span style="font-size: 15px; font-weight: 600">{{s.titre}}</span>
+                    <span style="{{s.modeStyle}}">{{s.mode}}</span>
+                  </div>
+                  <span style="font-size: 13px; color: var(--encre-douce)">{{s.detail}}</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 2px; width: 150px; flex-shrink: 0">
+                  <span style="font-size: 13px; color: var(--encre)">{{s.res}}</span>
+                  <span style="font-size: 12px; color: var(--encre-pale)">{{s.date}}</span>
+                </div>
+                <span style="display: flex; gap: 6px; flex-shrink: 0">
+                  <button type="button" onClick="{{s.reuse}}" style="height: 32px; padding: 0 14px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Réutiliser</button>
+                  <button type="button" onClick="{{s.del}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Supprimer</button>
+                </span>
+              </div>
+            </sc-for>
+            <sc-if value="{{noSaved}}" hint-placeholder-val="{{false}}">
+              <div style="padding: 28px 12px; font-size: 13px; color: var(--encre-pale); text-align: center">Aucune recherche sauvegardée. Chaque recherche lancée apparaît ici.</div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<sc-if value="{{md.show}}" hint-placeholder-val="{{false}}">
+  <div style="position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 60; background: rgba(20,22,26,0.42); display: flex; align-items: flex-start; justify-content: center; padding-top: 70px; box-sizing: border-box">
+    <div style="width: 1040px; max-width: calc(100% - 32px); max-height: calc(100% - 100px); overflow: auto; background: var(--surface); border-radius: var(--rayon-tuile); box-shadow: var(--ombre-fenetre); font-family: 'IBM Plex Sans', system-ui, sans-serif; color: var(--encre)">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-bottom: 1px solid var(--trait)">
+        <span style="font-size: 17px; font-weight: 600">{{md.nom}}</span>
+        <span style="{{md.flagStyle}}">{{md.flag}}</span>
+        <span style="font-size: 13px; color: var(--encre-douce); flex-grow: 1">{{md.where}}</span>
+        <button type="button" onClick="{{md.close}}" style="height: 34px; padding: 0 16px; font-size: 13px; color: var(--sur-accent); background: {{accent}}; border: none; border-radius: var(--rayon-controle); cursor: pointer">Fermer</button>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); gap: 0">
+
+        <div style="padding: 20px 22px; border-right: 1px solid var(--trait); display: flex; flex-direction: column; gap: 12px; background: var(--surface-creuse)">
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">ENTRÉE</span>
+          <span style="font-size: 13px; line-height: 1.5; color: var(--encre)">{{md.inText}}</span>
+          <sc-if value="{{md.hasIn}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 12px; color: var(--encre-douce)">{{md.insTitle}}</span>
+              <sc-for list="{{md.ins}}" as="i" hint-placeholder-count="2">
+                <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-controle)">
+                  <span style="font-size: 13px; flex-grow: 1">{{i.nom}}</span>
+                  <button type="button" onClick="{{i.unlink}}" aria-label="Retirer le lien depuis {{i.nom}}" style="height: 24px; padding: 0 8px; font-size: 12px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Retirer le lien</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{md.noIns}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: var(--danger)">Rien n'arrive dans cette tuile pour l'instant.</span></sc-if>
+              <span style="font-size: 12px; color: var(--encre-douce); margin-top: 4px">Recevoir depuis :</span>
+              <sc-for list="{{md.inCands}}" as="c" hint-placeholder-count="3">
+                <button type="button" onClick="{{c.link}}" style="text-align: left; height: 32px; padding: 0 10px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px dashed var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">+ {{c.nom}}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">LA TUILE</span>
+          <sc-for list="{{md.options}}" as="o" hint-placeholder-count="2">
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="{{o.id}}" style="font-size: 12px; color: var(--encre-douce)">{{o.label}}</label>
+              <input id="{{o.id}}" type="text" value="{{o.value}}" style="height: 36px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+          </sc-for>
+          <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">{{md.effet}}</span>
+          <sc-if value="{{md.canRemove}}" hint-placeholder-val="{{true}}">
+            <button type="button" onClick="{{md.remove}}" style="align-self: flex-start; height: 32px; padding: 0 14px; font-size: 13px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Retirer la tuile</button>
+          </sc-if>
+        </div>
+
+        <div style="padding: 20px 22px; border-left: 1px solid var(--trait); display: flex; flex-direction: column; gap: 12px; background: var(--surface-creuse)">
+          <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">SORTIE</span>
+          <span style="font-size: 13px; line-height: 1.5; color: var(--encre)">{{md.outText}}</span>
+          <sc-if value="{{md.hasOut}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 12px; color: var(--encre-douce)">{{md.outsTitle}}</span>
+              <sc-for list="{{md.outs}}" as="i" hint-placeholder-count="2">
+                <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-controle)">
+                  <span style="font-size: 13px; flex-grow: 1">{{i.nom}}</span>
+                  <button type="button" onClick="{{i.unlink}}" aria-label="Retirer le lien vers {{i.nom}}" style="height: 24px; padding: 0 8px; font-size: 12px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Retirer le lien</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{md.noOuts}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: var(--danger)">Rien ne part de cette tuile pour l'instant.</span></sc-if>
+              <span style="font-size: 12px; color: var(--encre-douce); margin-top: 4px">Envoyer vers :</span>
+              <sc-for list="{{md.outCands}}" as="c" hint-placeholder-count="3">
+                <button type="button" onClick="{{c.link}}" style="text-align: left; height: 32px; padding: 0 10px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px dashed var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">+ {{c.nom}}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{aideOpen}}" hint-placeholder-val="{{true}}">
+  <aside role="complementary" aria-label="Aide" style="position: absolute; right: 24px; bottom: 24px; width: 380px; height: 468px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-carte); box-shadow: var(--ombre-fenetre); display: flex; flex-direction: column; overflow: hidden">
+
+    <div style="flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 13px 14px 13px 16px; border-bottom: 1px solid var(--trait)">
+      <span style="display: inline-flex; flex-shrink: 0; color: var(--accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z"/></svg></span>
+      <span style="flex-grow: 1; font-size: 15px; font-weight: 600; color: var(--encre)">Aide</span>
+      <button type="button" onClick="{{aide.reduce}}" aria-label="Replier" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; padding: 0; color: var(--encre-douce); background: none; border: none; border-radius: var(--rayon-controle); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></button>
+    </div>
+
+    <div style="flex-grow: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+      <p style="font-size: 12px; line-height: 1.55; color: var(--encre-pale); padding-bottom: 4px; border-bottom: 1px solid var(--trait); margin: 0">{{aide.intro}}</p>
+
+      <div style="align-self: flex-end; max-width: 84%; font-size: 13px; line-height: 1.5; padding: 9px 12px; border-radius: var(--rayon-carte); background: var(--accent-fond); color: var(--accent-encre)">{{aide.q1}}</div>
+      <div style="align-self: flex-start; max-width: 92%; font-size: 13px; line-height: 1.55; color: var(--encre)">{{aide.a1}}</div>
+
+      <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); padding: 13px 14px; display: flex; flex-direction: column">
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-pale); margin-bottom: 10px">Plan proposé</span>
+        <sc-for list="{{aide.plan}}" as="pl" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 9px; padding: 5px 0">
+            <span style="flex-shrink: 0; width: 1px; height: 18px; background: var(--trait-fort)" aria-hidden="true"></span>
+            <span style="flex-grow: 1; min-width: 0; font-size: 13px; color: var(--encre); overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{pl.nom}}</span>
+            <span style="{{pl.flagStyle}}">{{pl.flag}}</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 8px; margin-top: 12px">
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; font-weight: 600; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer">{{aide.planGo}}</button>
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+        </div>
+      </div>
+
+      <div style="align-self: flex-end; max-width: 84%; font-size: 13px; line-height: 1.5; padding: 9px 12px; border-radius: var(--rayon-carte); background: var(--accent-fond); color: var(--accent-encre)">{{aide.q2}}</div>
+
+      <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); padding: 13px 14px; display: flex; flex-direction: column">
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-pale); margin-bottom: 4px">Trois constats</span>
+        <sc-for list="{{aide.constats}}" as="ct" hint-placeholder-count="3">
+          <div style="display: flex; align-items: flex-start; gap: 9px; padding: 8px 0 7px; border-top: 1px solid var(--trait)">
+            <span style="{{ct.dotStyle}}" aria-hidden="true"></span>
+            <span style="min-width: 0; font-size: 13px; line-height: 1.5; color: var(--encre)"><b style="font-weight: 600">{{ct.nom}}</b> {{ct.txt}}</span>
+            <span style="{{ct.nivStyle}}">{{ct.niv}}</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 8px; margin-top: 12px">
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; font-weight: 600; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer">Poser la Traduction</button>
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex-shrink: 0; border-top: 1px solid var(--trait); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{aide.chips}}" as="ch" hint-placeholder-count="3">
+          <button type="button" style="height: 28px; padding: 0 11px; font-size: 12px; color: var(--encre-douce); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-pilule); cursor: pointer; white-space: nowrap">{{ch.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <input type="text" placeholder="Pose ta question…" style="flex-grow: 1; min-width: 0; height: 36px; padding: 0 12px; font-size: 13px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); box-sizing: border-box" />
+        <button type="button" aria-label="Envoyer" style="flex-shrink: 0; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5l11 7-11 7V5z"/></svg></button>
+      </div>
+    </div>
+
+  </aside>
+</sc-if>
+
+<sc-if value="{{aideMin}}" hint-placeholder-val="{{false}}">
+  <button type="button" onClick="{{aide.ouvrir}}" style="position: absolute; right: 24px; bottom: 24px; height: 44px; padding: 0 16px; display: inline-flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-pilule); box-shadow: var(--ombre-fenetre); cursor: pointer">
+    <span style="display: inline-flex; color: var(--accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z"/></svg></span>
+    <span style="font-size: 14px; font-weight: 600; color: var(--encre)">Aide</span>
+    <span style="display: inline-flex; color: var(--encre-pale); transform: rotate(180deg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+  </button>
+</sc-if>
+
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2563A8","options":["#2563A8","#1F5A61","#5B3E82","#3E444C"]},"$preview":{"width":1360,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var ov0 = {
+      entreprises: { 'Finlande — PRH': false, 'info-financière (AMF)': false, 'OpenSanctions': true },
+      assos: { 'ProPublica Nonprofit': false, 'IRS — BMF / 990': false, 'ACNC Charity Register': false, 'Charities Register': false }
+    };
+    var g0 = this.seedGraph(['entreprises', 'assos', 'presse'], ov0);
+    this.state = {
+      aide: true,
+      open: { simple: true, adv: true, saved: true },
+      inner: { presets: true, plan: true },
+      dd: false,
+      preset: 'entreprises',
+      pays: 'Tous',
+      ov: ov0,
+      expand: null,
+      palOpen: 'outils',
+      cats: ['entreprises', 'assos', 'presse'],
+      nodes: g0.nodes,
+      edges: g0.edges,
+      selEdge: null,
+      modal: null,
+      linkFrom: null,
+      mouse: null,
+      sel: 'entreprises:companies-house',
+      saved: [
+        { id: 1, titre: 'AS Lyon Duchère', mode: 'Simple', cats: ['assos'], detail: 'Associations · pays FR', date: 'Aujourd\'hui · 09:12', res: '14 grappes' },
+        { id: 2, titre: 'Dupont Construction', mode: 'Avancée', cats: ['entreprises', 'assos', 'presse'], detail: 'Entreprises : Dupont Construction · Associations : Dupont · Presse : Dupont Construction', date: 'Hier · 16:40', res: '31 grappes' },
+        { id: 3, titre: 'Mairie de Voiron', mode: 'Simple', cats: ['orgs'], detail: 'Organisations officielles · pays FR', date: '24/10 · 11:05', res: '9 grappes' },
+        { id: 4, titre: 'Associations sportives Isère', mode: 'Avancée', cats: ['assos', 'lieux'], detail: 'Associations : club de judo · Lieux : Isère', date: '22/10 · 18:30', res: '27 grappes' }
+      ]
+    };
+  }
+
+  defs() {
+    // [id, nom, [sources allumées : nom, rôle, pays]]
+    return [
+      ['entreprises', 'Entreprises', [
+        ['Companies House', 'CHERCHER', 'UK'], ['BODACC', 'CHERCHER', 'FR'], ['Finlande — PRH', 'CHERCHER', 'FI'], ['info-financière (AMF)', 'CHERCHER', 'FR'],
+        ['OpenSanctions', 'VERIFIER', 'Mondial'], ['CourtListener', 'VERIFIER', 'US'], ['Wikidata (SPARQL)', 'RAPPROCHER', 'Mondial']]],
+      ['assos', 'Associations', [
+        ['DILA — JOAFE', 'CHERCHER', 'FR'], ['Charity Commission', 'CHERCHER', 'UK'], ['ProPublica Nonprofit', 'CHERCHER', 'US'],
+        ['IRS — BMF / 990', 'CHERCHER', 'US'], ['ACNC Charity Register', 'CHERCHER', 'AU'], ['Charities Register', 'CHERCHER', 'NZ']]],
+      ['orgs', 'Organisations officielles', [
+        ['OCDS Data Registry', 'CHERCHER', 'Mondial'], ['TED — marchés publics UE', 'CHERCHER', 'UE'], ['data.europa.eu', 'CATALOGUE', 'UE']]],
+      ['web', 'Web', [
+        ['SearXNG (auto-hébergé)', 'CHERCHER', 'Mondial'], ['Tavily', 'CHERCHER', 'Mondial'], ['Parallel Search', 'CHERCHER', 'Mondial'], ['Memento TimeTravel', 'VERIFIER', 'Mondial']]],
+      ['rs', 'Réseaux sociaux', [
+        ['Mobilizon', 'CHERCHER', 'Mondial'], ['Mastodon — hashtags', 'CHERCHER', 'Mondial'], ['Bluesky', 'CHERCHER', 'Mondial'], ['Lemmy', 'CHERCHER', 'Mondial'], ['Matrix — via SearXNG', 'CHERCHER', 'Mondial']]],
+      ['lieux', 'Lieux', [
+        ['Overpass (auto-hébergé)', 'CHERCHER', 'FR'], ['Nominatim', 'ENRICHIR', 'Mondial'], ['Photon', 'ENRICHIR', 'Mondial'], ['geoBoundaries', 'ENRICHIR', 'Mondial']]],
+      ['presse', 'Presse', [
+        ['Media Cloud', 'CHERCHER', 'Mondial'], ['GDELT', 'CHERCHER', 'Mondial'], ['radio-browser', 'CATALOGUE', 'Mondial']]],
+      ['perso', 'Personnalisé', [
+        ['Mon script communes.py', 'CHERCHER', 'FR']]]
+    ];
+  }
+
+  slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-'); }
+
+  srcOpts() { return [['Résultats maximum', '50'], ['Si la source échoue', 'continuer']]; }
+
+  stageOf(role) { return { CHERCHER: 0, VERIFIER: 1, ENRICHIR: 2 }[role]; }
+
+  mkSrc(cat, nom, role) {
+    return { id: cat + ':' + this.slug(nom), cat: cat, nom: nom, role: role, removable: true, opts: this.srcOpts() };
+  }
+
+  isOnIn(ov, catId, s) {
+    var o = ov[catId];
+    if (o && o[s[0]] !== undefined) return o[s[0]];
+    return s[1] !== 'VERIFIER';
+  }
+
+  edge(a, b) { return { id: a + '>' + b, from: a, to: b }; }
+
+  branchGraph(catId, ov) {
+    var self = this;
+    var d = this.defs().filter(function (x) { return x[0] === catId; })[0];
+    var stages = [[], [], []];
+    d[2].forEach(function (s) {
+      var k = self.stageOf(s[1]);
+      if (k !== undefined && self.isOnIn(ov, catId, s)) stages[k].push(self.mkSrc(catId, s[0], s[1]));
+    });
+    var seq = [0, 1, 2].filter(function (k) { return stages[k].length > 0; });
+    var edges = [];
+    for (var i = 0; i < seq.length - 1; i++) {
+      stages[seq[i]].forEach(function (a) { stages[seq[i + 1]].forEach(function (b) { edges.push(self.edge(a.id, b.id)); }); });
+    }
+    return {
+      stages: stages,
+      nodes: stages[0].concat(stages[1], stages[2]),
+      edges: edges,
+      first: seq.length ? stages[seq[0]] : [],
+      last: seq.length ? stages[seq[seq.length - 1]] : []
+    };
+  }
+
+  tidy(nodes, edges) {
+    var base = { ENTREE: 0, CHERCHER: 1, CATALOGUE: 1, OUTIL: 1, VERIFIER: 2, ENRICHIR: 3, RAPPROCHER: 4, GRAPPES: 0 };
+    var depth = {};
+    nodes.forEach(function (n) { depth[n.id] = base[n.role] || 0; });
+    for (var it = 0; it < nodes.length; it++) {
+      var ch = false;
+      edges.forEach(function (e) {
+        if (depth[e.from] === undefined || depth[e.to] === undefined || e.to === 'grappes') return;
+        if (depth[e.to] <= depth[e.from]) { depth[e.to] = depth[e.from] + 1; ch = true; }
+      });
+      if (!ch) break;
+    }
+    var mx = 0;
+    nodes.forEach(function (n) { if (n.id !== 'grappes') mx = Math.max(mx, depth[n.id]); });
+    depth['grappes'] = mx + 1;
+    var cols = {};
+    nodes.slice().sort(function (a, b) { return (a.y || 0) - (b.y || 0); }).forEach(function (n) {
+      var k = depth[n.id];
+      cols[k] = cols[k] || [];
+      cols[k].push(n.id);
+    });
+    return nodes.map(function (n) {
+      var k = depth[n.id];
+      return Object.assign({}, n, { x: 40 + k * 170, y: 50 + cols[k].indexOf(n.id) * 100 });
+    });
+  }
+
+  seedGraph(cats, ov) {
+    var self = this;
+    var nodes = [{ id: 'saisie', nom: 'Ta saisie', role: 'ENTREE', removable: false, opts: [['Ce que tu cherches', 'saisie de chaque catégorie'], ['Pays', 'FR']] }];
+    var edges = [];
+    var lasts = [];
+    cats.forEach(function (c) {
+      var g = self.branchGraph(c, ov);
+      nodes = nodes.concat(g.nodes);
+      edges = edges.concat(g.edges);
+      g.first.forEach(function (n) { edges.push(self.edge('saisie', n.id)); });
+      lasts = lasts.concat(g.last);
+    });
+    nodes.push({ id: 'fusion', nom: 'Fusion / doublons', role: 'RAPPROCHER', removable: true, opts: [['Même entité si', 'nom et ville identiques'], ['En cas de doublon, garder', 'la source la plus fiable']] });
+    nodes.push({ id: 'grappes', nom: 'Grappes', role: 'GRAPPES', removable: false, opts: [] });
+    lasts.forEach(function (n) { edges.push(self.edge(n.id, 'fusion')); });
+    edges.push(self.edge('fusion', 'grappes'));
+    return { nodes: this.tidy(nodes, edges), edges: edges };
+  }
+
+  freeSpot(nodes) {
+    for (var y = 50; y < 1200; y += 100) {
+      for (var x = 40; x < 1100; x += 170) {
+        var ok = nodes.every(function (n) { return Math.abs((n.x || 0) - x) > 120 || Math.abs((n.y || 0) - y) > 85; });
+        if (ok) return [x, y];
+      }
+    }
+    return [40, 50];
+  }
+
+
+  icons() {
+    return {"tableau-de-bord": "M4 20h16M7.5 20v-6M12 20V8M16.5 20v-9", "recherche": "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20.5 20.5L16 16", "reglages": "M12 9.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.64 5.64l1.84 1.84M16.52 16.52l1.84 1.84M18.36 5.64l-1.84 1.84M7.48 16.52l-1.84 1.84", "tri": "M7 4.5v15M7 4.5L4 7.5M7 4.5l3 3M17 19.5v-15M17 19.5l-3-3M17 19.5l3-3", "chercher": "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20.5 20.5L16 16", "verifier": "M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3zM9 12l2 2 4-4", "enrichir": "M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5", "catalogue": "M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4zM5 17a3 3 0 0 1 3-3h10", "outil": "M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6", "rapprocher": "M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1", "source": "M12 3.5c4.4 0 8 1.1 8 2.5s-3.6 2.5-8 2.5S4 7.4 4 6s3.6-2.5 8-2.5zM4 6v12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6M4 12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5", "saisie": "M4 9h16v6H4zM7.5 12h9", "grappe": "M12 4.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM6 13.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM18 13.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM10.2 10.2l-2.4 3.6M13.8 10.2l2.4 3.6", "quota": "M4 17.5a8 8 0 1 1 16 0M12 17.5l4.5-5", "cout": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM15.5 9.5A3.6 3.6 0 0 0 9.4 12a3.6 3.6 0 0 0 6.1 2.5M8 11h5.5M8 13h5.5", "ajouter": "M12 5v14M5 12h14", "modifier": "M4.5 19.5h4L19 9a2.83 2.83 0 0 0-4-4L4.5 15.5v4zM14 6l4 4", "retirer": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM8 12h8", "supprimer": "M5 7h14M9.5 7V4.5h5V7M6.5 7l.9 13h9.2l.9-13M10.5 11v5.5M13.5 11v5.5", "interrupteur": "M8 8h8a4 4 0 0 1 0 8H8a4 4 0 0 1 0-8zM16 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z", "lancer": "M8 5l11 7-11 7V5z", "tester": "M9.5 3h5M10.5 3v7.2l-4 7.6A2 2 0 0 0 8.3 21h7.4a2 2 0 0 0 1.8-3.2l-4-7.6V3M8.2 15h7.6", "reutiliser": "M20 12a8 8 0 1 1-2.4-5.7M20 4.5V9h-4.5", "ranger": "M4 5h6.5v6H4zM13.5 5H20v4h-6.5M13.5 11H20v8h-6.5zM4 13h6.5v6H4z", "deplier": "M6.5 9.5l5.5 5.5 5.5-5.5", "fermer": "M6.5 6.5l11 11M17.5 6.5l-11 11", "filtrer": "M4 5.5h16l-6.2 7.2V19L10.2 17v-4.3L4 5.5z", "pays": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM4 12h16M12 4c2.2 2.2 3.4 5 3.4 8s-1.2 5.8-3.4 8c-2.2-2.2-3.4-5-3.4-8S9.8 6.2 12 4z", "aide": "M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z", "attention": "M12 4.6L20.8 19.4H3.2L12 4.6zM12 10.2v4.1M12 16.9v.1", "ia": "M10.5 4.5c0 3.3 1.2 4.5 4.5 4.5-3.3 0-4.5 1.2-4.5 4.5 0-3.3-1.2-4.5-4.5-4.5 3.3 0 4.5-1.2 4.5-4.5zM17 13.5c0 2.2.8 3 3 3-2.2 0-3 .8-3 3 0-2.2-.8-3-3-3 2.2 0 3-.8 3-3z"};
+  }
+
+  pill(bg, fg, weight) {
+    return 'font-size: 11px; font-weight: ' + weight + '; letter-spacing: 0.02em; padding: 3px 9px; border-radius: var(--rayon-pilule); white-space: nowrap; align-self: flex-start; background: ' + bg + '; color: ' + fg;
+  }
+
+  flagStyle(role) {
+    var map = {
+      'CHERCHER':  ['var(--role-chercher-fond)', 'var(--role-chercher)'],
+      'VERIFIER':  ['var(--role-verifier-fond)', 'var(--role-verifier)'],
+      'ENRICHIR':  ['var(--role-enrichir-fond)', 'var(--role-enrichir)'],
+      'CATALOGUE': ['var(--role-catalogue-fond)', 'var(--role-catalogue)'],
+      'OUTIL':     ['var(--role-outil-fond)', 'var(--role-outil)'],
+      'RAPPROCHER': ['var(--role-rapprocher-fond)', 'var(--role-rapprocher)'],
+      'ENTREE':    ['var(--surface-page)', 'var(--encre-douce)']
+    };
+    var c = map[role] || map['OUTIL'];
+    return this.pill(c[0], c[1], '600');
+  }
+
+  roleLabel(role) {
+    return { VERIFIER: 'VÉRIFIER', ENTREE: 'DÉPART' }[role] || role;
+  }
+
+  chip(label, on, accent, fn) {
+    var base = 'height: 34px; padding: 0 14px; font-size: 13px; border-radius: var(--rayon-pilule); cursor: pointer; ';
+    return { label: label, pick: fn, style: base + (on
+      ? 'font-weight: 600; color: var(--accent-encre); background: var(--accent-fond); border: 1px solid ' + accent
+      : 'font-weight: 500; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort)') };
+  }
+
+  renderVals() {
+    var self = this;
+    var accent = this.props.accent || '#2563A8';
+    var ICO = this.icons();
+    var st = this.state;
+    var defs = this.defs();
+
+    var info = {
+      entreprises: ['Trouve une entreprise et ses dirigeants.', 'nom de l\'entreprise ou du dirigeant', 'gratuit', 'OpenSanctions : 4 120 / 5 000 ce mois (82 %)'],
+      assos: ['Trouve une association dans les registres officiels.', 'nom de l\'association', 'gratuit', 'Aucun quota proche de la limite.'],
+      orgs: ['Trouve une administration ou un organisme public.', 'nom de l\'organisme', 'gratuit', 'Aucun quota proche de la limite.'],
+      web: ['Cherche sur le web ouvert.', 'mots à chercher', 'environ 0,02 €', 'Tavily : 812 / 1 000 ce mois (81 %)'],
+      rs: ['Cherche des groupes et des événements sur les réseaux ouverts.', 'nom, mot-clé ou hashtag', 'gratuit', 'Aucun quota proche de la limite.'],
+      lieux: ['Trouve et localise un lieu.', 'nom ou adresse du lieu', 'gratuit', 'Aucun quota proche de la limite.'],
+      presse: ['Cherche dans la presse et les médias.', 'nom, sujet ou média', 'gratuit', 'Media Cloud : 14 / 1 000 cette semaine.'],
+      perso: ['Tes sources et scripts à toi.', 'ce que ton script attend', 'gratuit', 'Aucun quota proche de la limite.']
+    };
+    var catName = {};
+    defs.forEach(function (d) { catName[d[0]] = d[1]; });
+
+    var tabs = [
+      { label: 'Tableau de bord', icon: ICO['tableau-de-bord'], later: false, style: 'display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 14px; border-bottom: 2px solid transparent; color: var(--encre-douce)' },
+      { label: 'Recherche', icon: ICO['recherche'], later: false, style: 'display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 14px; border-bottom: 2px solid ' + accent + '; color: var(--encre); font-weight: 600' },
+      { label: 'Réglages', icon: ICO['reglages'], later: false, style: 'display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 14px; border-bottom: 2px solid transparent; color: var(--encre-douce)' },
+      { label: 'Tri', icon: ICO['tri'], later: false, style: 'display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 14px; border-bottom: 2px solid transparent; color: var(--encre-douce)' }
+    ];
+
+    // ---------- sections repliables ----------
+    function section(key, summary, big) {
+      var open = st.open[key];
+      return {
+        open: open,
+        summary: summary,
+        cardStyle: 'background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-carte); overflow: visible; '
+          + (open ? 'box-shadow: var(--ombre-carte); border-left: 3px solid ' + accent + ';' : ''),
+        chev: 'display: inline-flex; flex-shrink: 0; transition: transform 120ms ease; transform: rotate(' + (open ? '0' : '-90') + 'deg)',
+        toggle: function () {
+          var o = Object.assign({}, self.state.open);
+          o[key] = !o[key];
+          self.setState({ open: o });
+        }
+      };
+    }
+    function innerSec(key, summary) {
+      var open = st.inner[key];
+      return {
+        open: open,
+        summary: summary,
+        chev: 'display: inline-flex; flex-shrink: 0; transition: transform 120ms ease; transform: rotate(' + (open ? '0' : '-90') + 'deg)',
+        toggle: function () {
+          var o = Object.assign({}, self.state.inner);
+          o[key] = !o[key];
+          self.setState({ inner: o });
+        }
+      };
+    }
+
+    // ---------- Recherche simple ----------
+    var cd = defs.filter(function (d) { return d[0] === st.preset; })[0];
+    var ci = info[st.preset];
+    var presetOpts = defs.map(function (d) {
+      var on = st.preset === d[0];
+      return {
+        name: d[1],
+        count: d[2].length + ' sources',
+        style: 'display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; box-sizing: border-box; padding: 10px 12px; text-align: left; cursor: pointer; border: none; border-radius: var(--rayon-controle); color: var(--encre); background: ' + (on ? 'var(--accent-fond)' : 'transparent'),
+        pick: function () { self.setState({ preset: d[0], pays: 'Tous', dd: false }); }
+      };
+    });
+    // ----- coches des sources (le préréglage garde ces choix) -----
+    function defaultOn(s) { return s[1] !== 'VERIFIER'; }
+    function isOnFrom(ov, catId, s) {
+      var o = ov[catId];
+      if (o && o[s[0]] !== undefined) return o[s[0]];
+      return defaultOn(s);
+    }
+    function isOn(catId, s) { return isOnFrom(st.ov, catId, s); }
+    function modCount(d) {
+      var o = st.ov[d[0]] || {};
+      return d[2].filter(function (s) { return o[s[0]] !== undefined && o[s[0]] !== defaultOn(s); }).length;
+    }
+    function toggleSource(d, s) {
+      return function () {
+        var cur = self.state;
+        var nowOn = !isOnFrom(cur.ov, d[0], s);
+        var ov = Object.assign({}, cur.ov);
+        ov[d[0]] = Object.assign({}, ov[d[0]]);
+        ov[d[0]][s[0]] = nowOn;
+        var nodes = cur.nodes, edges = cur.edges;
+        var id = d[0] + ':' + slug(s[0]);
+        if (stageRoles[s[1]] !== undefined && cur.cats.indexOf(d[0]) >= 0) {
+          nodes = nodes.filter(function (n) { return n.id !== id; });
+          edges = edges.filter(function (e) { return e.from !== id && e.to !== id; });
+          if (nowOn) {
+            var nn = self.mkSrc(d[0], s[0], s[1]);
+            var p = self.freeSpot(nodes);
+            nn.x = p[0]; nn.y = p[1];
+            nodes = nodes.concat([nn]);
+          }
+        }
+        self.setState({ ov: ov, nodes: nodes, edges: edges });
+      };
+    }
+    presetOpts.forEach(function (p, i) {
+      if (modCount(defs[i]) > 0) p.count = p.count + ' · modifié';
+    });
+    function colRows(roles) {
+      return cd[2].filter(function (s) { return roles.indexOf(s[1]) >= 0 && matches(s); }).map(function (s) {
+        var on = isOn(cd[0], s);
+        return {
+          nom: s[0],
+          pays: roles.length > 1 ? s[1].toLowerCase() + ' · ' + s[2] : s[2],
+          aria: on ? 'true' : 'false',
+          tick: on ? '✓' : '',
+          toggle: toggleSource(cd, s),
+          boxStyle: 'display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; flex-shrink: 0; box-sizing: border-box; border-radius: 4px; font-size: 12px; font-weight: 600; line-height: 1; '
+            + (on ? 'color: var(--sur-accent); background: ' + accent + '; border: 1px solid ' + accent : 'color: transparent; background: var(--surface); border: 1px solid var(--trait-fort)'),
+          style: 'display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; padding: 6px 4px; background: none; border: none; border-radius: var(--rayon-controle); cursor: pointer; color: ' + (on ? 'var(--encre)' : 'var(--trait-fort)')
+        };
+      });
+    }
+    var colDefs = [['CHERCHER', 'CHERCHER', ['CHERCHER']], ['VERIFIER', 'VÉRIFIER', ['VERIFIER']], ['ENRICHIR', 'ENRICHIR', ['ENRICHIR']], ['RAPPROCHER', 'AUTRES', ['RAPPROCHER', 'CATALOGUE']]];
+    var stepCols = colDefs.map(function (c) {
+      var rows = colRows(c[2]);
+      var nOn = rows.filter(function (r) { return r.aria === 'true'; }).length;
+      return { flag: c[1], flagStyle: self.flagStyle(c[0]), count: rows.length ? nOn + ' sur ' + rows.length : '—', rows: rows, empty: rows.length === 0 };
+    });
+    var curMod = modCount(cd);
+    var resetCur = function () {
+      var s = self.state;
+      var ov = Object.assign({}, s.ov);
+      delete ov[cd[0]];
+      var nodes = s.nodes, edges = s.edges;
+      if (s.cats.indexOf(cd[0]) >= 0) {
+        var rm = nodes.filter(function (n) { return n.cat === cd[0] && stageRoles[n.role] !== undefined; }).map(function (n) { return n.id; });
+        nodes = nodes.filter(function (n) { return rm.indexOf(n.id) < 0; });
+        edges = edges.filter(function (e) { return rm.indexOf(e.from) < 0 && rm.indexOf(e.to) < 0; });
+        cd[2].forEach(function (x) {
+          if (stageRoles[x[1]] !== undefined && defaultOn(x)) {
+            var nn = self.mkSrc(cd[0], x[0], x[1]);
+            var p = self.freeSpot(nodes);
+            nn.x = p[0]; nn.y = p[1];
+            nodes = nodes.concat([nn]);
+          }
+        });
+      }
+      self.setState({ ov: ov, nodes: nodes, edges: edges });
+    };
+
+    function matches(s) { return st.pays === 'Tous' || s[2] === st.pays || s[2] === 'Mondial' || (st.pays === 'UE' && (s[2] === 'FI' || s[2] === 'UE')); }
+    var paysChips = ['Tous', 'FR', 'UK', 'US', 'UE'].map(function (p) {
+      return self.chip(p, st.pays === p, accent, function () { self.setState({ pays: p }); });
+    });
+
+    // ---------- Recherche avancée ----------
+    var srcOpts = self.srcOpts();
+    function slug(s) { return self.slug(s); }
+    var stageRoles = { CHERCHER: 0, VERIFIER: 1, ENRICHIR: 2 };
+    var byId = {};
+    st.nodes.forEach(function (n) { byId[n.id] = n; });
+
+    function removeNode(n) {
+      var s = self.state;
+      var ov = Object.assign({}, s.ov);
+      if (n.cat && stageRoles[n.role] !== undefined) {
+        ov[n.cat] = Object.assign({}, ov[n.cat]);
+        ov[n.cat][n.nom] = false;
+      }
+      self.setState({
+        ov: ov,
+        nodes: s.nodes.filter(function (x) { return x.id !== n.id; }),
+        edges: s.edges.filter(function (e) { return e.from !== n.id && e.to !== n.id; }),
+        sel: s.sel === n.id ? null : s.sel,
+        linkFrom: null
+      });
+    }
+
+    function dropCat(catId) {
+      var s = self.state;
+      var ids = s.nodes.filter(function (n) { return n.cat === catId; }).map(function (n) { return n.id; });
+      self.setState({
+        cats: s.cats.filter(function (c) { return c !== catId; }),
+        nodes: s.nodes.filter(function (n) { return ids.indexOf(n.id) < 0; }),
+        edges: s.edges.filter(function (e) { return ids.indexOf(e.from) < 0 && ids.indexOf(e.to) < 0; })
+      });
+    }
+
+    var catChips = defs.map(function (d) {
+      var on = st.cats.indexOf(d[0]) >= 0;
+      return self.chip(d[1], on, accent, function () {
+        var s = self.state;
+        if (on) { dropCat(d[0]); return; }
+        var g = self.branchGraph(d[0], s.ov);
+        var maxY = s.nodes.reduce(function (m, n) { return Math.max(m, n.y || 0); }, 0);
+        var yy = s.nodes.length ? maxY + 100 : 50;
+        var nn = g.nodes.map(function (n) {
+          var k = self.stageOf(n.role);
+          return Object.assign({}, n, { x: 40 + (k + 1) * 170, y: yy + g.stages[k].indexOf(n) * 100 });
+        });
+        var ed = g.edges.slice();
+        var hasNode = function (id) { return s.nodes.some(function (x) { return x.id === id; }); };
+        if (hasNode('saisie')) g.first.forEach(function (n) { ed.push(self.edge('saisie', n.id)); });
+        var end = hasNode('fusion') ? 'fusion' : (hasNode('grappes') ? 'grappes' : null);
+        if (end) g.last.forEach(function (n) { ed.push(self.edge(n.id, end)); });
+        self.setState({ cats: s.cats.concat([d[0]]), nodes: s.nodes.concat(nn), edges: s.edges.concat(ed) });
+      });
+    });
+
+    var activeCats = defs.filter(function (d) { return st.cats.indexOf(d[0]) >= 0; });
+
+    var queryRows = activeCats.map(function (d) {
+      var total = d[2].filter(function (s) { return stageRoles[s[1]] !== undefined; });
+      var nOn = total.filter(function (s) { return isOn(d[0], s); }).length;
+      return {
+        name: d[1],
+        qid: 'qa-' + d[0],
+        placeholder: info[d[0]][1],
+        srcSummary: nOn + ' sur ' + total.length,
+        expanded: st.expand === d[0],
+        toggleExp: function () { self.setState({ expand: self.state.expand === d[0] ? null : d[0] }); },
+        srcChips: total.map(function (s) { return self.chip(s[0], isOn(d[0], s), accent, toggleSource(d, s)); })
+      };
+    });
+
+    // ----- plan de travail libre : tuiles déplaçables, liens tirés à la main -----
+    var TILE = 64;
+    var ICONS = {
+      ENTREE: ICO['saisie'],
+      CHERCHER: ICO['chercher'],
+      VERIFIER: ICO['verifier'],
+      ENRICHIR: ICO['enrichir'],
+      CATALOGUE: ICO['catalogue'],
+      OUTIL: ICO['outil'],
+      RAPPROCHER: ICO['rapprocher'],
+      GRAPPES: ICO['grappe']
+    };
+    var roleColor = { CHERCHER: 'var(--role-chercher)', VERIFIER: 'var(--role-verifier)', ENRICHIR: 'var(--role-enrichir)', CATALOGUE: 'var(--role-catalogue)', OUTIL: 'var(--role-outil)', RAPPROCHER: 'var(--role-rapprocher)', ENTREE: 'var(--encre-douce)', GRAPPES: accent };
+    var roleSub = { CHERCHER: 'chercher', VERIFIER: 'vérifier', ENRICHIR: 'enrichir', CATALOGUE: 'catalogue', OUTIL: 'outil', RAPPROCHER: 'rapprocher', ENTREE: 'départ', GRAPPES: 'résultat' };
+
+    function curve(x1, y1, x2, y2) {
+      var dx = Math.max(40, Math.abs(x2 - x1) / 2);
+      return 'M' + x1 + ' ' + y1 + ' C ' + (x1 + dx) + ' ' + y1 + ', ' + (x2 - dx) + ' ' + y2 + ', ' + x2 + ' ' + y2;
+    }
+    function canvasPt(ev) {
+      var el = ev && ev.currentTarget;
+      var box = el && el.closest ? el.closest('[data-cv]') : null;
+      if (!box) box = el;
+      var r = box.getBoundingClientRect();
+      return [ev.clientX - r.left, ev.clientY - r.top];
+    }
+    function stop(ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); }
+
+    var maxX = 0, maxY = 0;
+    st.nodes.forEach(function (n) { maxX = Math.max(maxX, n.x || 0); maxY = Math.max(maxY, n.y || 0); });
+    var CW = Math.max(1010, maxX + 220), CH = Math.max(420, maxY + 150);
+
+    var cvNodes = st.nodes.map(function (n) {
+      var on = st.sel === n.id;
+      var armed = st.linkFrom === n.id;
+      var grappes = n.role === 'GRAPPES';
+      return {
+        nom: n.nom,
+        sub: roleSub[n.role],
+        icon: ICONS[n.role],
+        color: roleColor[n.role],
+        hasIn: n.role !== 'ENTREE',
+        hasOut: !grappes,
+        showRemove: !!(n.removable && on),
+        stop: stop,
+        down: function (ev) {
+          stop(ev);
+          var p = canvasPt(ev);
+          self._drag = { id: n.id, ox: p[0] - n.x, oy: p[1] - n.y, sx: n.x, sy: n.y, moved: false };
+        },
+        up: function () {
+          var dg = self._drag;
+          self._drag = null;
+          var s = self.state;
+          if (s.linkFrom && s.linkFrom !== n.id && n.role !== 'ENTREE') {
+            var eid = s.linkFrom + '>' + n.id;
+            var dup = s.edges.some(function (e) { return e.id === eid; });
+            self.setState({ edges: dup ? s.edges : s.edges.concat([self.edge(s.linkFrom, n.id)]), linkFrom: null, selEdge: null, sel: n.id });
+            return;
+          }
+          if (!dg || !dg.moved) self.setState({ sel: n.id, selEdge: null, modal: n.id });
+        },
+        portDown: function (ev) {
+          stop(ev);
+          var p = canvasPt(ev);
+          self._pd = { x: p[0], y: p[1], moved: false };
+          self._drag = null;
+          self.setState({ linkFrom: n.id, mouse: p, selEdge: null });
+        },
+        remove: function (ev) { stop(ev); removeNode(n); },
+        wrapStyle: 'position: absolute; left: ' + (n.x - 33) + 'px; top: ' + n.y + 'px; width: 130px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: grab; z-index: ' + (on || armed ? 3 : 2),
+        tileStyle: 'position: relative; width: ' + TILE + 'px; height: ' + TILE + 'px; box-sizing: border-box; border-radius: var(--rayon-tuile); display: flex; align-items: center; justify-content: center; '
+          + (grappes
+            ? 'background: var(--accent-fond); border: 1.5px solid ' + accent + '; box-shadow: var(--ombre-posee)'
+            : 'background: var(--surface); border: 1.5px solid ' + (on || armed ? accent : 'var(--trait-fort)') + '; box-shadow: ' + (on || armed ? '0 0 0 3px ' + accent + '2E' : '0 1px 2px rgba(20,22,26,0.08)'))
+      };
+    });
+
+    var cvEdges = [];
+    var edgeBtn = { show: false, style: '', del: function () {} };
+    st.edges.forEach(function (e) {
+      var A = byId[e.from], B = byId[e.to];
+      if (!A || !B) return;
+      var x1 = A.x + TILE + 7, y1 = A.y + TILE / 2, x2 = B.x - 7, y2 = B.y + TILE / 2;
+      var picked = st.selEdge === e.id;
+      cvEdges.push({
+        d: curve(x1, y1, x2, y2),
+        color: picked ? accent : 'var(--trait-fort)',
+        sw: picked ? 2.4 : 1.6,
+        pick: function (ev) { stop(ev); self.setState({ selEdge: e.id, linkFrom: null, sel: null }); }
+      });
+      if (picked) {
+        edgeBtn = {
+          show: true,
+          style: 'position: absolute; z-index: 4; left: ' + Math.round((x1 + x2) / 2 - 56) + 'px; top: ' + Math.round((y1 + y2) / 2 - 14) + 'px; height: 28px; padding: 0 12px; font-size: 12px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer; box-shadow: 0 1px 3px rgba(20,22,26,0.15)',
+          del: function () { self.setState({ edges: self.state.edges.filter(function (x) { return x.id !== e.id; }), selEdge: null }); }
+        };
+      }
+    });
+
+    var tmp = { show: false, d: '' };
+    if (st.linkFrom && byId[st.linkFrom] && st.mouse) {
+      var F = byId[st.linkFrom];
+      tmp = { show: true, d: curve(F.x + TILE + 7, F.y + TILE / 2, st.mouse[0], st.mouse[1]) };
+    }
+
+    var cv = {
+      w: CW, h: CH,
+      nodes: cvNodes, edges: cvEdges, tmp: tmp, edgeBtn: edgeBtn,
+      bgDown: function () {
+        self._drag = null;
+        self.setState({ sel: null, selEdge: null, linkFrom: null });
+      },
+      move: function (ev) {
+        var dg = self._drag;
+        var s = self.state;
+        if (dg) {
+          if (ev.buttons === 0) { self._drag = null; return; }
+          var p = canvasPt(ev);
+          var nx = Math.max(10, Math.round(p[0] - dg.ox)), ny = Math.max(10, Math.round(p[1] - dg.oy));
+          if (Math.abs(nx - dg.sx) > 3 || Math.abs(ny - dg.sy) > 3) dg.moved = true;
+          if (!dg.moved) return;
+          self.setState({ nodes: s.nodes.map(function (n) { return n.id === dg.id ? Object.assign({}, n, { x: nx, y: ny }) : n; }) });
+        } else if (s.linkFrom) {
+          var q = canvasPt(ev);
+          if (self._pd && Math.abs(q[0] - self._pd.x) + Math.abs(q[1] - self._pd.y) > 8) self._pd.moved = true;
+          self.setState({ mouse: q });
+        }
+      },
+      up: function () {
+        self._drag = null;
+        if (self.state.linkFrom && self._pd && self._pd.moved) self.setState({ linkFrom: null });
+        self._pd = null;
+      },
+      leave: function () {
+        self._drag = null;
+        if (self.state.linkFrom && self._pd && self._pd.moved) self.setState({ linkFrom: null });
+      },
+      tidy: function () {
+        var s = self.state;
+        self.setState({ nodes: self.tidy(s.nodes, s.edges) });
+      }
+    };
+
+    var tools = [
+      ['boucle', 'Boucle', 'OUTIL', 'depart', [['Répéter pour chaque', 'ville de la liste'], ['Maximum de tours', '50']]],
+      ['budget', 'Compteur budget', 'OUTIL', 'depart', [['Budget maximum', '5 € par mois'], ['À partir de 80 %', 'prévenir']]],
+      ['traduction', 'Traduction', 'OUTIL', 'depart', [['Langue d\'entrée', 'détecter'], ['Traduire vers', 'français, anglais, allemand'], ['Ne pas traduire', 'les noms propres']]],
+      ['format', 'Format JSON / CSV', 'OUTIL', 'branch', [['Format de sortie', 'CSV'], ['Séparateur', ';']]],
+      ['filtre', 'Filtre', 'OUTIL', 'branch', [['Garder si le champ', 'pays'], ['est égal à', 'FR']]],
+      ['attente', 'Attente (quota)', 'OUTIL', 'branch', [['Quand le quota est atteint', 'attendre'], ['Attente maximale', '10 minutes']]],
+      ['si', 'Condition « si »', 'OUTIL', 'regroup', [['Si le champ', 'catégorie'], ['est égal à', 'association']]],
+      ['fusion', 'Fusion / doublons', 'RAPPROCHER', 'regroup', [['Même entité si', 'nom et ville identiques'], ['En cas de doublon, garder', 'la source la plus fiable']]],
+      ['ia', 'Assistant IA', 'OUTIL', 'branch', [['Opération', 'résumer'], ['Modèle', 'local (Ollama)'], ['Marquer les résultats', 'oui — « produit par IA »']], true]
+    ];
+
+    function hasId(id) { return !!byId[id]; }
+
+    function target(def) {
+      if (def.kind === 'tool') return { id: def.key + ':' + Date.now(), nom: def.nom, role: def.role, removable: true, opts: def.opts };
+      return self.mkSrc(def.cat, def.nom, def.role);
+    }
+
+    function item(def) {
+      var posed = def.kind === 'source' && hasId(def.cat + ':' + slug(def.nom));
+      var off = !!def.off;
+      var mute = posed || off;
+      return {
+        nom: def.nom,
+        mark: off ? 'éteinte' : (posed ? 'posée' : '+'),
+        markStyle: 'font-size: 12px; flex-shrink: 0; ' + (mute ? 'color: var(--encre-pale)' : 'color: ' + accent + '; font-weight: 600'),
+        style: 'display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; padding: 7px 8px 7px 26px; background: none; border: none; border-radius: var(--rayon-controle); cursor: ' + (mute ? 'default' : 'pointer') + '; color: ' + (mute ? 'var(--trait-fort)' : 'var(--encre)'),
+        add: function () {
+          if (off) return;
+          var s = self.state;
+          var n = target(def);
+          if (s.nodes.some(function (x) { return x.id === n.id; })) return;
+          var p = self.freeSpot(s.nodes);
+          n.x = p[0]; n.y = p[1];
+          var cats = s.cats;
+          if (n.cat && cats.indexOf(n.cat) < 0) cats = cats.concat([n.cat]);
+          var ov = Object.assign({}, s.ov);
+          if (n.cat && stageRoles[n.role] !== undefined) {
+            ov[n.cat] = Object.assign({}, ov[n.cat]);
+            ov[n.cat][n.nom] = true;
+          }
+          self.setState({ ov: ov, nodes: s.nodes.concat([n]), cats: cats, sel: n.id, selEdge: null });
+        }
+      };
+    }
+
+    var groups = [{
+      id: 'outils',
+      name: 'Outils',
+      count: tools.length,
+      items: tools.map(function (t) {
+        return item({ kind: 'tool', key: t[0], nom: t[1], role: t[2], zone: t[3], opts: t[4], off: t[5] });
+      })
+    }].concat(defs.map(function (d) {
+      return {
+        id: d[0],
+        name: d[1],
+        count: d[2].length,
+        items: d[2].map(function (s) { return item({ kind: 'source', cat: d[0], nom: s[0], role: s[1] }); })
+      };
+    })).map(function (g) {
+      var open = st.palOpen === g.id;
+      return {
+        name: g.name,
+        count: g.count,
+        open: open,
+        items: g.items,
+        chevStyle: 'display: inline-flex; flex-shrink: 0; transition: transform 120ms ease; transform: rotate(' + (open ? '0' : '-90') + 'deg)',
+        toggle: function () { self.setState({ palOpen: st.palOpen === g.id ? null : g.id }); }
+      };
+    });
+
+    var neutrePill = 'font-size: 11px; font-weight: 600; letter-spacing: 0.02em; padding: 3px 9px; border-radius: var(--rayon-pilule); white-space: nowrap; flex-shrink: 0; background: var(--surface-creuse); color: var(--encre-pale)';
+    var aidePlan = [
+        { nom: "Ta saisie", role: "ENTRÉE" },
+        { nom: "DILA — JOAFE", role: "CHERCHER" },
+        { nom: "Nominatim", role: "ENRICHIR" },
+        { nom: "Fusion / doublons", role: "RAPPROCHER" },
+        { nom: "Grappes", role: "GRAPPES" }
+    ].map(function (p) {
+      var neutre = p.role === 'ENTRÉE' || p.role === 'GRAPPES';
+      return { nom: p.nom, flag: p.role, flagStyle: neutre ? neutrePill : self.flagStyle(p.role).replace('font-size: 12px', 'font-size: 11px') };
+    });
+    var aide = {
+      intro: "Je connais tes sources, tes outils et ton plan de travail. Je ne cherche pas à ta place : je te dis quoi poser, et pourquoi.",
+      q1: "je cherche une association à Grenoble", a1: "Quatre briques suffisent. DILA — JOAFE couvre le répertoire national des associations, Nominatim ramène l'adresse à des coordonnées, et Fusion retire les doublons avant la grappe.",
+      plan: aidePlan, planGo: "Poser ces tuiles",
+      q2: "pourquoi ça n'a rien donné ?", a2: "",
+      chips: ["Comment je fais…", "Pourquoi ça n'a rien donné ?", "Ça veut dire quoi…"].map(function (c) { return { label: c }; }),
+      constats: [
+        { nom: 'Charity Commission', txt: "n'a aucun lien entrant : elle n'est jamais interrogée.", niv: 'bloquant' },
+        { nom: 'Overpass (auto-hébergé)', txt: 'est posée mais éteinte dans Réglages : elle ne répondra pas.', niv: 'bloquant' },
+        { nom: 'DILA — JOAFE', txt: 'cherche en français, ta saisie est en anglais. Une tuile Traduction avant réglerait ça.', niv: 'remarque' }
+      ].map(function (c) {
+        var bloq = c.niv === 'bloquant';
+        return {
+          nom: c.nom, txt: c.txt, niv: c.niv,
+          dotStyle: 'flex-shrink: 0; width: 7px; height: 7px; margin-top: 6px; border-radius: var(--rayon-rond); background: ' + (bloq ? 'var(--etat-attention)' : 'var(--trait-fort)'),
+          nivStyle: 'margin-left: auto; flex-shrink: 0; align-self: flex-start; margin-top: 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; padding: 3px 9px; border-radius: var(--rayon-pilule); white-space: nowrap; '
+            + (bloq ? 'background: var(--etat-attention-fond); color: var(--etat-attention)' : 'background: var(--etat-eteint-fond); color: var(--encre-douce)')
+        };
+      }),
+      reduce: function () { self.setState({ aide: false }); },
+      ouvrir: function () { self.setState({ aide: true }); }
+    };
+
+    var effets = {
+      OUTIL: 'Effet dans le Tableau de bord : défini dans Réglages > Outils.',
+      RAPPROCHER: 'Effet dans le Tableau de bord : défini dans Réglages > Outils.',
+      CHERCHER: 'Dans le Tableau de bord : nombre de résultats trouvés par cette source.',
+      VERIFIER: 'Dans le Tableau de bord : nombre de confirmations apportées.',
+      ENRICHIR: 'Dans le Tableau de bord : informations ajoutées aux résultats.',
+      CATALOGUE: 'Dans le Tableau de bord : sources proposées par ce catalogue.',
+      ENTREE: 'Ce que tu saisis au lancement.',
+      GRAPPES: 'Les résultats regroupés arrivent ici.'
+    };
+    function stageText(n) {
+      if (n.cat) return catName[n.cat] + ' · ' + self.roleLabel(n.role).toLowerCase();
+      return { ENTREE: 'Départ de la recherche', GRAPPES: 'Résultat : les grappes', RAPPROCHER: 'Brique libre · lien', OUTIL: 'Brique libre · outil' }[n.role] || 'Brique libre';
+    }
+
+    var IO = {
+      ENTREE: [null, 'Le texte saisi pour chaque catégorie, avec le pays.'],
+      CHERCHER: ['Le nom saisi.', 'Des fiches : nom, identifiant, adresse, source.'],
+      VERIFIER: ['Des fiches à confirmer.', 'Les mêmes fiches, marquées confirmées ou non.'],
+      ENRICHIR: ['Des fiches.', 'Les fiches avec des informations en plus (adresse, coordonnées).'],
+      CATALOGUE: ['Rien de précis.', 'Une liste de sources proposées.'],
+      OUTIL: ['Des fiches.', 'Les fiches après le traitement de l\'outil.'],
+      RAPPROCHER: ['Des fiches de plusieurs sources.', 'Les fiches rassemblées, doublons retirés.'],
+      GRAPPES: ['Les fiches regroupées.', null]
+    };
+    var mn = st.modal ? byId[st.modal] : null;
+    var md = { show: false, nom: '', flag: '', flagStyle: '', where: '', inText: '', outText: '', hasIn: false, hasOut: false, insTitle: '', outsTitle: '', ins: [], outs: [], noIns: false, noOuts: false, inCands: [], outCands: [], options: [], effet: '', canRemove: false, remove: function () {}, close: function () {} };
+    if (mn) {
+      var io = IO[mn.role] || IO.OUTIL;
+      var hasIn = mn.role !== 'ENTREE', hasOut = mn.role !== 'GRAPPES';
+      var linkTo = function (a, b) {
+        return function () {
+          var s = self.state;
+          if (s.edges.some(function (e) { return e.from === a && e.to === b; })) return;
+          self.setState({ edges: s.edges.concat([self.edge(a, b)]) });
+        };
+      };
+      var unlinkE = function (id) { return function () { self.setState({ edges: self.state.edges.filter(function (e) { return e.id !== id; }) }); }; };
+      var inE = st.edges.filter(function (e) { return e.to === mn.id && byId[e.from]; });
+      var outE = st.edges.filter(function (e) { return e.from === mn.id && byId[e.to]; });
+      var has = function (a, b) { return st.edges.some(function (e) { return e.from === a && e.to === b; }); };
+      md = {
+        show: true,
+        nom: mn.nom,
+        flag: self.roleLabel(mn.role),
+        flagStyle: self.flagStyle(mn.role).replace('font-size: 11px', 'font-size: 12px'),
+        where: stageText(mn),
+        inText: io[0] ? 'Reçoit : ' + io[0] : 'Cette tuile est le départ : rien n\'entre.',
+        outText: io[1] ? 'Envoie : ' + io[1] : 'Fin du parcours : rien ne sort. Les grappes se lisent dans le Tableau de bord.',
+        hasIn: hasIn, hasOut: hasOut,
+        insTitle: 'Reliée à l\'entrée :', outsTitle: 'Reliée à la sortie :',
+        ins: inE.map(function (e) { return { nom: byId[e.from].nom, unlink: unlinkE(e.id) }; }),
+        outs: outE.map(function (e) { return { nom: byId[e.to].nom, unlink: unlinkE(e.id) }; }),
+        noIns: hasIn && inE.length === 0,
+        noOuts: hasOut && outE.length === 0,
+        inCands: st.nodes.filter(function (n) { return n.id !== mn.id && n.role !== 'GRAPPES' && !has(n.id, mn.id); }).map(function (n) { return { nom: n.nom, link: linkTo(n.id, mn.id) }; }),
+        outCands: st.nodes.filter(function (n) { return n.id !== mn.id && n.role !== 'ENTREE' && !has(mn.id, n.id); }).map(function (n) { return { nom: n.nom, link: linkTo(mn.id, n.id) }; }),
+        options: mn.opts.map(function (o, i) { return { id: 'm-' + i, label: o[0], value: o[1] }; }),
+        effet: effets[mn.role] || '',
+        canRemove: !!mn.removable,
+        remove: function () { removeNode(mn); self.setState({ modal: null }); },
+        close: function () { self.setState({ modal: null }); }
+      };
+    }
+
+    // ---------- Recherches sauvegardées ----------
+    function addSaved(entry) {
+      var s = self.state;
+      self.setState({ saved: [Object.assign({ id: Date.now() }, entry)].concat(s.saved), open: Object.assign({}, s.open, { saved: true }) });
+    }
+    var saved = st.saved.map(function (e) {
+      var adv = e.mode === 'Avancée';
+      return {
+        titre: e.titre,
+        mode: e.mode,
+        modeStyle: self.pill(adv ? 'var(--role-enrichir-fond)' : 'var(--accent-fond)', adv ? 'var(--role-enrichir)' : 'var(--accent-encre)', '600'),
+        detail: e.detail,
+        date: e.date,
+        res: e.res,
+        reuse: function () {
+          var s = self.state;
+          if (adv) {
+            var g = self.seedGraph(e.cats, s.ov);
+            self.setState({ cats: e.cats.slice(), nodes: g.nodes, edges: g.edges, sel: null, selEdge: null, linkFrom: null, open: Object.assign({}, s.open, { adv: true }) });
+          } else {
+            self.setState({ preset: e.cats[0], pays: 'Tous', open: Object.assign({}, s.open, { simple: true }) });
+          }
+        },
+        del: function () {
+          self.setState({ saved: self.state.saved.filter(function (x) { return x.id !== e.id; }) });
+        }
+      };
+    });
+
+    return {
+      accent: accent,
+      tabs: tabs,
+      sA: section('simple', cd[1]),
+      sB: section('adv', st.cats.length + (st.cats.length > 1 ? ' catégories' : ' catégorie')),
+      sC: section('saved', st.saved.length + (st.saved.length > 1 ? ' recherches' : ' recherche')),
+      iP: innerSec('presets', st.cats.length + ' sélectionnés'),
+      iN: innerSec('plan', 'tuiles libres, liens à tirer'),
+      cur: { name: cd[1], hint: ci[0], placeholder: ci[1], cost: ci[2], quota: ci[3] },
+      ddOpen: st.dd,
+      ddToggle: function () { self.setState({ dd: !self.state.dd }); },
+      presetOpts: presetOpts,
+      paysChips: paysChips,
+      steps: stepCols,
+      showMod: curMod > 0,
+      curMod: curMod + (curMod > 1 ? ' changements' : ' changement'),
+      resetCur: resetCur,
+      launchSimple: function () {
+        addSaved({ titre: 'Recherche ' + cd[1].toLowerCase(), mode: 'Simple', cats: [st.preset], detail: cd[1] + ' · pays ' + st.pays, date: 'À l\'instant', res: 'en cours' });
+      },
+      catChips: catChips,
+      queryRows: queryRows,
+      cv: cv,
+      noBranch: activeCats.length === 0,
+      groups: groups,
+      aideOpen: !!self.state.aide,
+      aideMin: !self.state.aide,
+      aide: aide,
+      md: md,
+      advLine: activeCats.length
+        ? activeCats.length + ' catégories, ' + activeCats.length + ' saisies, regroupées en grappes.'
+        : 'Aucune catégorie choisie.',
+      launchAdv: function () {
+        if (!activeCats.length) return;
+        addSaved({ titre: 'Recherche multi-catégories', mode: 'Avancée', cats: st.cats.slice(), detail: activeCats.map(function (d) { return d[1]; }).join(' · '), date: 'À l\'instant', res: 'en cours' });
+      },
+      saved: saved,
+      noSaved: saved.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

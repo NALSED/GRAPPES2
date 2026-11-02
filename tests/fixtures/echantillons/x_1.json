@@ -1,0 +1,121 @@
+{
+  "data": [
+    {
+      "id": "1900000000000000001",
+      "text": "Article jardinage https://t.co/AbC123 via @compte_demo_b #jardinage",
+      "edit_history_tweet_ids": ["1900000000000000001"],
+      "created_at": "2026-09-02T10:00:00.000Z",
+      "author_id": "2000000001",
+      "lang": "fr",
+      "conversation_id": "1900000000000000001",
+      "reply_settings": "everyone",
+      "public_metrics": {
+        "retweet_count": 3,
+        "reply_count": 1,
+        "like_count": 12,
+        "quote_count": 0,
+        "bookmark_count": 2,
+        "impression_count": 540
+      },
+      "entities": {
+        "urls": [
+          {
+            "start": 18,
+            "end": 37,
+            "url": "https://t.co/AbC123",
+            "expanded_url": "https://exemple-a.example.test/articles/jardin-1",
+            "display_url": "exemple-a.example.test/articles/jardin-1"
+          }
+        ],
+        "mentions": [
+          {"start": 42, "end": 56, "username": "compte_demo_b", "id": "2000000002"}
+        ],
+        "hashtags": [
+          {"start": 57, "end": 67, "tag": "jardinage"}
+        ]
+      }
+    },
+    {
+      "id": "1900000000000000002",
+      "text": "RT @compte_demo_a: recette de saison",
+      "edit_history_tweet_ids": ["1900000000000000002"],
+      "created_at": "2026-09-03T12:30:00.000Z",
+      "author_id": "2000000002",
+      "lang": "fr",
+      "conversation_id": "1900000000000000002",
+      "reply_settings": "everyone",
+      "referenced_tweets": [
+        {"type": "retweeted", "id": "1900000000000000009"}
+      ],
+      "public_metrics": {
+        "retweet_count": 0,
+        "reply_count": 0,
+        "like_count": 0,
+        "quote_count": 0,
+        "bookmark_count": 0,
+        "impression_count": 0
+      },
+      "entities": {
+        "mentions": [
+          {"start": 3, "end": 17, "username": "compte_demo_a", "id": "2000000001"}
+        ]
+      }
+    },
+    {
+      "id": "1900000000000000003",
+      "text": "Réponse sans lien ni mention",
+      "edit_history_tweet_ids": ["1900000000000000003"],
+      "created_at": "2026-09-04T08:10:00.000Z",
+      "author_id": "2000000003",
+      "lang": "fr",
+      "in_reply_to_user_id": "2000000001",
+      "conversation_id": "1900000000000000001",
+      "referenced_tweets": [
+        {"type": "replied_to", "id": "1900000000000000001"}
+      ]
+    }
+  ],
+  "includes": {
+    "users": [
+      {
+        "id": "2000000001",
+        "name": "Compte Demo A",
+        "username": "compte_demo_a",
+        "created_at": "2020-01-15T09:00:00.000Z",
+        "description": "Compte de démonstration A",
+        "verified": false,
+        "public_metrics": {
+          "followers_count": 1200,
+          "following_count": 150,
+          "tweet_count": 3400,
+          "listed_count": 12
+        }
+      },
+      {
+        "id": "2000000002",
+        "name": "Compte Demo B",
+        "username": "compte_demo_b",
+        "created_at": "2021-03-20T14:30:00.000Z",
+        "description": "Compte de démonstration B",
+        "verified": false,
+        "public_metrics": {
+          "followers_count": 300,
+          "following_count": 80,
+          "tweet_count": 900,
+          "listed_count": 2
+        }
+      },
+      {
+        "id": "2000000003",
+        "name": "Compte Demo C",
+        "username": "compte_demo_c",
+        "created_at": "2022-07-01T08:00:00.000Z",
+        "verified": false
+      }
+    ]
+  },
+  "meta": {
+    "result_count": 3,
+    "next_token": "demo_next_token_001"
+  }
+}

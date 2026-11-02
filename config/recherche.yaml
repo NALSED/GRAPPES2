@@ -1,0 +1,10 @@
+# Multiprise de recherche. Les appels réels dépendent du seul interrupteur `autonome`
+# (config/autonomie.yaml, false par défaut = dry-run). Seuls les FOURNISSEURS ont une liste blanche.
+# Un fournisseur = un fichier YAML dans config/recherche/ (voir config/recherche/exemples/)
+# ou un plugin Python dans plugins/. Aucun fournisseur n'est codé en dur dans le cœur.
+actifs: [tavily, wikipedia, rss_letudiant, rss_liberation, rss_franceinfo]             # liste blanche des fournisseurs (ids) ; vide = rien d'actif
+quota_total: 100             # requêtes maximum par exécution, tous fournisseurs confondus
+delai_s: 1.0                 # délai minimal entre deux requêtes
+limite_par_mot_cle: 10       # candidats maximum par mot-clé et par fournisseur (Tavily : 0 à 20)
+plugins_dir: plugins
+journal: donnees/journal_recherche.log

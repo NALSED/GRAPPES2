@@ -1,0 +1,16 @@
+id: G-DEMO-A
+label: "Grappe de démonstration A (cuisine)"
+scale: 3.0
+lexicon:
+  terms:
+    "soupe": 1.0
+    "recette": 1.0
+    "#cuisine": 1.5
+    "café crème": 1.0
+  negative:
+    "terme parasite": 1.0
+anchors:
+  - "x:chef_demo"
+  - "web:exemple-a.test"
+oppositions:
+  - "G-DEMO-B"

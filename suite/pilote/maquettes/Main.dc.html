@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Pilote grappes — Réglages</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --surface: #FFFFFF;
+  --surface-page: #F2F3F5;
+  --surface-creuse: #F7F8F9;
+  --trait: #E3E5E8;
+  --trait-fort: #868C94;
+  --encre: #1A1C1F;
+  --encre-douce: #5C6168;
+  --encre-pale: #696F78;
+  --accent: #2563A8;
+  --accent-fond: #E8EFF8;
+  --accent-encre: #1F4F85;
+  --sur-accent: #FFFFFF;
+  --etat-ok: #1E7F4F;
+  --etat-ok-fond: #EAF3EC;
+  --etat-ok-encre: #1E6340;
+  --etat-attention: #8A5209;
+  --etat-attention-fond: #FBF0E4;
+  --etat-eteint: #868C94;
+  --etat-eteint-fond: #ECEEF1;
+  --danger: #8A3324;
+  --danger-fond: #FAEFE6;
+  --role-chercher: #1F4F85;        --role-chercher-fond: #E8EFF8;
+  --role-verifier: #1E6340;        --role-verifier-fond: #EAF3EC;
+  --role-enrichir: #5B3E82;        --role-enrichir-fond: #F3EEF8;
+  --role-catalogue: #7A4E12;       --role-catalogue-fond: #FBF0E4;
+  --role-outil: #3E444C;           --role-outil-fond: #ECEEF1;
+  --role-rapprocher: #1F5A61;      --role-rapprocher-fond: #E7F2F3;
+  --rayon-controle: 6px;
+  --rayon-carte: 10px;
+  --rayon-tuile: 14px;
+  --rayon-pilule: 999px;
+  --rayon-rond: 50%;
+  --ombre-posee: 0 1px 2px rgba(20, 22, 26, 0.08);
+  --ombre-carte: 0 1px 3px rgba(20, 22, 26, 0.07);
+  --ombre-panneau: 0 2px 12px rgba(20, 22, 26, 0.10);
+  --ombre-fenetre: 0 12px 40px rgba(20, 22, 26, 0.30);
+}
+body { margin: 0; font-family: "IBM Plex Sans", system-ui, sans-serif; background: var(--surface-page); color: var(--encre); }
+a { color: var(--accent-encre); }
+a:hover { color: var(--accent); }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</helmet>
+
+<div style="min-height: 100%; position: relative">
+
+  <nav style="background: var(--surface); border-bottom: 1px solid var(--trait)">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 32px; display: flex; align-items: stretch; gap: 8px; height: 56px">
+      <span style="display: flex; align-items: center; font-size: 15px; font-weight: 600; margin-right: 24px">Grappes</span>
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <span style="{{t.style}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.icon}}"/></svg>{{t.label}}<sc-if value="{{t.later}}" hint-placeholder-val="{{false}}"><span style="font-size: 11px; font-weight: 500; margin-left: 8px; padding: 2px 8px; border-radius: var(--rayon-pilule); background: var(--surface-page); color: var(--encre-pale)">plus tard</span></sc-if></span>
+      </sc-for>
+    </div>
+  </nav>
+
+  <div style="padding: 36px 32px 72px">
+    <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Réglages</h1>
+          <p style="margin: 0; font-size: 14px; color: var(--encre-douce)">{{subtitle}}</p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <label for="filtre" style="font-size: 12px; color: var(--encre-douce)">Filtrer</label>
+            <input id="filtre" type="search" placeholder="nom…" style="width: 200px; height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+          </div>
+          <button type="button" onClick="{{openAdd}}" style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 500; color: var(--sur-accent); background: {{accent}}; border: none; border-radius: var(--rayon-controle); cursor: pointer; align-self: flex-end; display: inline-flex; align-items: center; gap: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>{{addLabel}}</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 6px; padding: 4px; background: var(--trait); border-radius: var(--rayon-carte); align-self: flex-start">
+        <sc-for list="{{subs}}" as="s" hint-placeholder-count="2">
+          <button type="button" onClick="{{s.go}}" style="{{s.style}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{s.icon}}"/></svg>{{s.label}}<span style="{{s.countStyle}}">{{s.count}}</span></button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{showSources}}" hint-placeholder-val="{{true}}">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <sc-for list="{{cats}}" as="cat" hint-placeholder-count="8">
+            <div style="{{cat.cardStyle}}">
+
+              <button type="button" onClick="{{cat.toggle}}" style="width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: none; border: none; text-align: left; cursor: pointer">
+                <span style="{{cat.chevStyle}}" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--encre-douce)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>
+                </span>
+                <span style="font-size: 15px; font-weight: 600; flex-grow: 1">{{cat.name}}</span>
+                <span style="font-size: 13px; color: var(--encre-douce); background: var(--surface-page); border-radius: var(--rayon-pilule); padding: 4px 12px">{{cat.summary}}</span>
+              </button>
+
+              <sc-if value="{{cat.open}}" hint-placeholder-val="{{true}}">
+                <div style="border-top: 1px solid var(--trait); padding: 8px 12px 12px">
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 4px 8px 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">
+                    <span style="width: 150px; flex-shrink: 0">ÉTAT</span>
+                    <span style="flex-grow: 1; min-width: 180px">NOM</span>
+                    <span style="width: 68px; flex-shrink: 0">COÛT</span>
+                    <span style="width: 96px; flex-shrink: 0">RÔLE</span>
+                    <span style="width: 150px; flex-shrink: 0">QUOTA</span>
+                    <span style="width: 152px; flex-shrink: 0">ACTIONS</span>
+                  </div>
+                  <sc-for list="{{cat.rows}}" as="row" hint-placeholder-count="6">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 11px 8px; border-top: 1px solid var(--trait)">
+                      <span style="display: flex; align-items: center; gap: 8px; width: 150px; flex-shrink: 0">
+                        <span style="{{row.dotStyle}}" aria-hidden="true"></span>
+                        <span style="font-size: 13px; color: var(--encre-douce)">{{row.etat}}</span>
+                      </span>
+                      <span style="flex-grow: 1; min-width: 180px; display: flex; align-items: baseline; gap: 8px">
+                        <span style="font-size: 13px; font-weight: 600">{{row.nom}}</span>
+                        <span style="font-size: 12px; color: var(--encre-pale)">{{row.pays}}</span>
+                      </span>
+                      <span style="width: 68px; flex-shrink: 0"><span style="{{row.costStyle}}">{{row.cost}}</span></span>
+                      <span style="width: 96px; flex-shrink: 0"><span style="{{row.flagStyle}}">{{row.flag}}</span></span>
+                      <span style="width: 150px; flex-shrink: 0; display: flex; flex-direction: column; gap: 5px">
+                        <span style="{{row.quotaTextStyle}}">{{row.quotaText}}</span>
+                        <span style="display: block; height: 4px; border-radius: var(--rayon-pilule); background: var(--trait); overflow: hidden"><span style="{{row.barStyle}}"></span></span>
+                      </span>
+                      <span style="display: flex; gap: 6px; width: 152px; flex-shrink: 0">
+                        <button type="button" onClick="{{row.edit}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; display: inline-flex; align-items: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5h4L19 9a2.83 2.83 0 0 0-4-4L4.5 15.5v4zM14 6l4 4"/></svg>Modifier</button>
+                        <button type="button" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer; display: inline-flex; align-items: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM8 12h8"/></svg>Retirer</button>
+                      </span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showOutils}}" hint-placeholder-val="{{false}}">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <p style="margin: 0; font-size: 14px; color: var(--encre-douce); max-width: 640px; line-height: 1.5">Les outils transforment ou relient les résultats. Chaque tuile allumée devient une brique que tu poses dans la Recherche avancée.</p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px">
+            <sc-for list="{{tiles}}" as="tile" hint-placeholder-count="9">
+              <div style="{{tile.cardStyle}}">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                  <span style="font-size: 15px; font-weight: 600">{{tile.nom}}</span>
+                  <span style="{{tile.flagStyle}}">{{tile.flag}}</span>
+                </div>
+                <p style="margin: 0; font-size: 13px; line-height: 1.5; color: var(--encre-douce); flex-grow: 1">{{tile.desc}}</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                  <span style="display: flex; align-items: center; gap: 8px">
+                    <span style="{{tile.dotStyle}}" aria-hidden="true"></span>
+                    <span style="font-size: 13px; color: var(--encre-douce)">{{tile.etat}}</span>
+                  </span>
+                  <span style="display: flex; gap: 6px">
+                    <button type="button" onClick="{{tile.edit}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; display: inline-flex; align-items: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5h4L19 9a2.83 2.83 0 0 0-4-4L4.5 15.5v4zM14 6l4 4"/></svg>Modifier</button>
+                    <button type="button" onClick="{{tile.toggle}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; display: inline-flex; align-items: center; gap: 6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h8a4 4 0 0 1 0 8H8a4 4 0 0 1 0-8zM16 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>{{tile.action}}</button>
+                  </span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{panelOpen}}" hint-placeholder-val="{{false}}">
+    <div>
+      <div onClick="{{closePanel}}" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(20,22,26,0.34)"></div>
+      <aside style="{{panelStyle}}">
+
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 24px 28px 18px; border-bottom: 1px solid var(--trait)">
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+            <h2 style="margin: 0; font-size: 17px; font-weight: 600">{{panel.title}}</h2>
+            <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--encre-douce)">
+              <sc-if value="{{isEdit}}" hint-placeholder-val="{{true}}"><span style="{{panel.dotStyle}}" aria-hidden="true"></span></sc-if>
+              <span>{{panel.sub}}</span>
+            </span>
+          </div>
+          <button type="button" onClick="{{closePanel}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; flex-shrink: 0">Fermer</button>
+        </div>
+
+        <div style="flex-grow: 1; overflow-y: auto; padding: 22px 28px; display: flex; flex-direction: column; gap: 22px">
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-nom" style="font-size: 13px; font-weight: 600">Nom</label>
+            <input id="f-nom" type="text" value="{{panel.nom}}" placeholder="ex. Companies House" style="height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Catégorie <span style="font-weight: 500; color: var(--danger)">obligatoire</span></span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{catChips}}" as="c" hint-placeholder-count="8">
+                <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Rôle <span style="font-weight: 500; color: var(--danger)">obligatoire</span></span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-for list="{{roleChips}}" as="r" hint-placeholder-count="6">
+                <button type="button" onClick="{{r.pick}}" style="{{r.style}}">{{r.label}}</button>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">CHERCHER, VÉRIFIER et ENRICHIR travaillent dans une catégorie. CATALOGUE, OUTIL et LIEN servent à toutes.</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">Coût</span>
+              <div style="display: flex; gap: 8px">
+                <sc-for list="{{costChips}}" as="c" hint-placeholder-count="2">
+                  <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="f-pays" style="font-size: 13px; font-weight: 600">Pays</label>
+              <input id="f-pays" type="text" value="{{panel.pays}}" placeholder="FR, UK, Mondial…" style="height: 34px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="f-langue" style="font-size: 13px; font-weight: 600">Langue</label>
+              <input id="f-langue" type="text" value="{{panel.langue}}" placeholder="fr, en, de…" style="height: 34px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+              <span style="font-size: 12px; color: var(--encre-pale)">La langue dans laquelle cette source attend les mots cherchés. L'Aide s'en sert pour signaler qu'une Traduction manque.</span>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Fiabilité de la source</span>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap">
+              <sc-for list="{{fiabChips}}" as="c" hint-placeholder-count="6">
+                <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">{{panel.fiabDesc}}</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Quota</span>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <input id="f-quota" type="text" value="{{panel.quota}}" placeholder="illimité" aria-label="Plafond" style="width: 120px; height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; font-variant-numeric: tabular-nums; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+              <span style="font-size: 13px; color: var(--encre-douce)">par</span>
+              <input id="f-unite" type="text" value="{{panel.unite}}" placeholder="jour, mois…" aria-label="Période" style="width: 140px; height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="f-desc" style="font-size: 13px; font-weight: 600">Description</label>
+            <textarea id="f-desc" rows="3" placeholder="Ce que la source donne, ses limites, sa licence." style="box-sizing: border-box; padding: 10px 12px; font-size: 14px; line-height: 1.5; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); resize: vertical">{{panel.desc}}</textarea>
+          </div>
+
+          <sc-if value="{{isEdit}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">État</span>
+              <div style="display: flex; gap: 8px">
+                <sc-for list="{{etatChips}}" as="c" hint-placeholder-count="2">
+                  <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">Derniers tests</span>
+              <div style="display: flex; flex-direction: column; border: 1px solid var(--trait); border-radius: var(--rayon-controle)">
+                <sc-for list="{{history}}" as="h" hint-placeholder-count="3">
+                  <span style="padding: 9px 12px; font-size: 13px; color: var(--encre-douce); border-top: 1px solid var(--trait)">{{h.t}}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{isAdd}}" hint-placeholder-val="{{false}}">
+            <p style="margin: 0; font-size: 13px; line-height: 1.5; color: var(--encre-douce); padding: 12px 14px; background: var(--surface-page); border-radius: var(--rayon-carte)">Une nouvelle source démarre « à vérifier ». Elle passe « opérationnelle » après son premier test réussi.</p>
+          </sc-if>
+
+        </div>
+
+        <div style="padding: 16px 28px 20px; border-top: 1px solid var(--trait); display: flex; flex-direction: column; gap: 12px">
+          <span style="font-size: 12px; color: var(--danger); min-height: 16px">{{hint}}</span>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button type="button" onClick="{{closePanel}}" style="{{submitStyle}}">{{submitLabel}}</button>
+            <button type="button" onClick="{{closePanel}}" style="height: 40px; padding: 0 16px; font-size: 14px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+            <sc-if value="{{isEdit}}" hint-placeholder-val="{{true}}">
+              <button type="button" onClick="{{closePanel}}" style="margin-left: auto; height: 40px; padding: 0 14px; font-size: 14px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Retirer</button>
+            </sc-if>
+          </div>
+          <sc-if value="{{isEdit}}" hint-placeholder-val="{{true}}">
+            <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">Retirer enlève la source de la liste. Les fichiers ne sont pas supprimés.</span>
+          </sc-if>
+        </div>
+
+      </aside>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{tv.open}}" hint-placeholder-val="{{false}}">
+    <div>
+      <div onClick="{{tv.close}}" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(20,22,26,0.34)"></div>
+      <aside style="{{tv.panelStyle}}">
+
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 24px 28px 18px; border-bottom: 1px solid var(--trait)">
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+            <h2 style="margin: 0; font-size: 17px; font-weight: 600">{{tv.title}}</h2>
+            <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--encre-douce)">
+              <sc-if value="{{tv.isEdit}}" hint-placeholder-val="{{true}}"><span style="{{tv.dotStyle}}" aria-hidden="true"></span></sc-if>
+              <span>{{tv.sub}}</span>
+            </span>
+          </div>
+          <button type="button" onClick="{{tv.close}}" style="height: 32px; padding: 0 12px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer; flex-shrink: 0">Fermer</button>
+        </div>
+
+        <div style="flex-grow: 1; overflow-y: auto; padding: 22px 28px; display: flex; flex-direction: column; gap: 22px">
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="t-nom" style="font-size: 13px; font-weight: 600">Nom de l'outil</label>
+            <input id="t-nom" type="text" value="{{tv.nom}}" placeholder="ex. Garder la France" style="height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Comment il travaille</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <sc-for list="{{tv.kindChips}}" as="c" hint-placeholder-count="2">
+                <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{tv.isModele}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">Modèle</span>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                <sc-for list="{{tv.modeleChips}}" as="c" hint-placeholder-count="8">
+                  <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <span style="font-size: 13px; font-weight: 600">Réglages du modèle</span>
+              <sc-for list="{{tv.options}}" as="o" hint-placeholder-count="2">
+                <div style="display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: center">
+                  <label for="{{o.id}}" style="font-size: 13px; color: var(--encre-douce)">{{o.label}}</label>
+                  <input id="{{o.id}}" type="text" value="{{o.value}}" style="height: 36px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{tv.isScript}}" hint-placeholder-val="{{false}}">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="t-code" style="font-size: 13px; font-weight: 600">Ton script (Python)</label>
+              <textarea id="t-code" rows="7" spellcheck="false" style="box-sizing: border-box; padding: 12px; font-size: 13px; line-height: 1.55; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--encre); background: var(--surface-creuse); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); resize: vertical">{{tv.code}}</textarea>
+              <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">Le script reçoit la liste des résultats et renvoie une liste. Il tourne dans une boîte isolée : pas d'accès au réseau, 10 secondes au maximum.</span>
+            </div>
+          </sc-if>
+
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="t-fait" style="font-size: 13px; font-weight: 600">Ce qu'il fait</label>
+            <input id="t-fait" type="text" value="{{tv.fait}}" placeholder="Une phrase" style="height: 40px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="t-recoit" style="font-size: 13px; font-weight: 600">Ce qu'il reçoit</label>
+              <input id="t-recoit" type="text" value="{{tv.recoit}}" style="height: 36px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="t-renvoie" style="font-size: 13px; font-weight: 600">Ce qu'il renvoie</label>
+              <input id="t-renvoie" type="text" value="{{tv.renvoie}}" style="height: 36px; box-sizing: border-box; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle)">
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Rôle</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <sc-for list="{{tv.roleChips}}" as="c" hint-placeholder-count="3">
+                <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Effet dans le Tableau de bord</span>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <sc-for list="{{tv.effetChips}}" as="c" hint-placeholder-count="4">
+                <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; line-height: 1.5; color: var(--encre-douce)">{{tv.effetText}}</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 13px; font-weight: 600">Test sur un exemple</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">ENTRÉE</span>
+                <div style="padding: 10px 12px; min-height: 56px; box-sizing: border-box; font-size: 13px; line-height: 1.5; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--surface-creuse); border: 1px solid var(--trait); border-radius: var(--rayon-controle); white-space: pre-wrap">{{tv.testIn}}</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; color: var(--encre-pale)">SORTIE</span>
+                <div style="padding: 10px 12px; min-height: 56px; box-sizing: border-box; font-size: 13px; line-height: 1.5; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--surface-creuse); border: 1px solid var(--trait); border-radius: var(--rayon-controle); white-space: pre-wrap">{{tv.testOut}}</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <button type="button" style="height: 34px; padding: 0 14px; font-size: 13px; font-weight: 500; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Lancer le test</button>
+              <span style="font-size: 12px; color: var(--encre-douce)">L'outil passe « opérationnel » après un test réussi.</span>
+            </div>
+          </div>
+
+          <sc-if value="{{tv.isEdit}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 13px; font-weight: 600">État</span>
+              <div style="display: flex; gap: 8px">
+                <sc-for list="{{tv.etatChips}}" as="c" hint-placeholder-count="2">
+                  <button type="button" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+
+        <div style="padding: 16px 28px 20px; border-top: 1px solid var(--trait); display: flex; flex-direction: column; gap: 12px">
+          <span style="font-size: 12px; color: var(--danger); min-height: 16px">{{tv.hint}}</span>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button type="button" onClick="{{tv.close}}" style="{{tv.submitStyle}}">{{tv.submitLabel}}</button>
+            <button type="button" onClick="{{tv.close}}" style="height: 40px; padding: 0 16px; font-size: 14px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+            <sc-if value="{{tv.isEdit}}" hint-placeholder-val="{{true}}">
+              <button type="button" onClick="{{tv.close}}" style="margin-left: auto; height: 40px; padding: 0 14px; font-size: 14px; color: var(--danger); background: var(--surface); border: 1px solid var(--danger); border-radius: var(--rayon-controle); cursor: pointer">Retirer</button>
+            </sc-if>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{warnOpen}}" hint-placeholder-val="{{false}}">
+    <div>
+      <div onClick="{{warn.close}}" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(20,22,26,0.34)"></div>
+      <div role="dialog" aria-modal="true" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 480px; background: var(--surface); border-radius: var(--rayon-carte); box-shadow: var(--ombre-fenetre); display: flex; flex-direction: column">
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 24px 26px 0">
+          <span style="display: inline-flex; flex-shrink: 0; color: var(--etat-attention)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{warn.icon}}"/></svg></span>
+          <h2 style="margin: 0; font-size: 17px; font-weight: 600">{{warn.title}}</h2>
+        </div>
+
+        <div style="padding: 16px 26px 0; display: flex; flex-direction: column; gap: 10px">
+          <sc-for list="{{warn.points}}" as="pt" hint-placeholder-count="4">
+            <div style="display: flex; align-items: flex-start; gap: 10px">
+              <span style="flex-shrink: 0; width: 5px; height: 5px; margin-top: 7px; border-radius: var(--rayon-rond); background: var(--etat-attention)" aria-hidden="true"></span>
+              <span style="font-size: 13px; line-height: 1.55; color: var(--encre-douce)">{{pt.txt}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding: 22px 26px 24px; display: flex; align-items: center; gap: 10px">
+          <button type="button" onClick="{{warn.go}}" style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer">Allumer</button>
+          <button type="button" onClick="{{warn.close}}" style="height: 40px; padding: 0 16px; font-size: 14px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+        </div>
+
+      </div>
+    </div>
+  </sc-if>
+
+
+<sc-if value="{{aideOpen}}" hint-placeholder-val="{{true}}">
+  <aside role="complementary" aria-label="Aide" style="position: absolute; right: 24px; bottom: 24px; width: 380px; height: 468px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-carte); box-shadow: var(--ombre-fenetre); display: flex; flex-direction: column; overflow: hidden">
+
+    <div style="flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 13px 14px 13px 16px; border-bottom: 1px solid var(--trait)">
+      <span style="display: inline-flex; flex-shrink: 0; color: var(--accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z"/></svg></span>
+      <span style="flex-grow: 1; font-size: 15px; font-weight: 600; color: var(--encre)">Aide</span>
+      <button type="button" onClick="{{aide.reduce}}" aria-label="Replier" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; padding: 0; color: var(--encre-douce); background: none; border: none; border-radius: var(--rayon-controle); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></button>
+    </div>
+
+    <div style="flex-grow: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+      <p style="font-size: 12px; line-height: 1.55; color: var(--encre-pale); padding-bottom: 4px; border-bottom: 1px solid var(--trait); margin: 0">{{aide.intro}}</p>
+
+      <div style="align-self: flex-end; max-width: 84%; font-size: 13px; line-height: 1.5; padding: 9px 12px; border-radius: var(--rayon-carte); background: var(--accent-fond); color: var(--accent-encre)">{{aide.q1}}</div>
+      <div style="align-self: flex-start; max-width: 92%; font-size: 13px; line-height: 1.55; color: var(--encre)">{{aide.a1}}</div>
+
+      <div style="border: 1px solid var(--trait); border-radius: var(--rayon-carte); padding: 13px 14px; display: flex; flex-direction: column">
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-pale); margin-bottom: 10px">Déjà en place</span>
+        <sc-for list="{{aide.plan}}" as="pl" hint-placeholder-count="3">
+          <div style="display: flex; align-items: center; gap: 9px; padding: 5px 0">
+            <span style="flex-shrink: 0; width: 1px; height: 18px; background: var(--trait-fort)" aria-hidden="true"></span>
+            <span style="flex-grow: 1; min-width: 0; font-size: 13px; color: var(--encre); overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{pl.nom}}</span>
+            <span style="{{pl.flagStyle}}">{{pl.flag}}</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; gap: 8px; margin-top: 12px">
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; font-weight: 600; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer">{{aide.planGo}}</button>
+          <button type="button" style="height: 32px; padding: 0 13px; font-size: 13px; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); cursor: pointer">Annuler</button>
+        </div>
+      </div>
+
+      <div style="align-self: flex-end; max-width: 84%; font-size: 13px; line-height: 1.5; padding: 9px 12px; border-radius: var(--rayon-carte); background: var(--accent-fond); color: var(--accent-encre)">{{aide.q2}}</div>
+      <div style="align-self: flex-start; max-width: 92%; font-size: 13px; line-height: 1.55; color: var(--encre)">{{aide.a2}}</div>
+    </div>
+
+    <div style="flex-shrink: 0; border-top: 1px solid var(--trait); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{aide.chips}}" as="ch" hint-placeholder-count="3">
+          <button type="button" style="height: 28px; padding: 0 11px; font-size: 12px; color: var(--encre-douce); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-pilule); cursor: pointer; white-space: nowrap">{{ch.label}}</button>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <input type="text" placeholder="Pose ta question…" style="flex-grow: 1; min-width: 0; height: 36px; padding: 0 12px; font-size: 13px; font-family: inherit; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort); border-radius: var(--rayon-controle); box-sizing: border-box" />
+        <button type="button" aria-label="Envoyer" style="flex-shrink: 0; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0; color: var(--sur-accent); background: var(--accent); border: 1px solid var(--accent); border-radius: var(--rayon-controle); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5l11 7-11 7V5z"/></svg></button>
+      </div>
+    </div>
+
+  </aside>
+</sc-if>
+
+<sc-if value="{{aideMin}}" hint-placeholder-val="{{false}}">
+  <button type="button" onClick="{{aide.ouvrir}}" style="position: absolute; right: 24px; bottom: 24px; height: 44px; padding: 0 16px; display: inline-flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-pilule); box-shadow: var(--ombre-fenetre); cursor: pointer">
+    <span style="display: inline-flex; color: var(--accent)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z"/></svg></span>
+    <span style="font-size: 14px; font-weight: 600; color: var(--encre)">Aide</span>
+    <span style="display: inline-flex; color: var(--encre-pale); transform: rotate(180deg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg></span>
+  </button>
+</sc-if>
+
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2563A8","options":["#2563A8","#1F5A61","#5B3E82","#3E444C"]},"$preview":{"width":1360,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: 'entreprises', sub: 'sources', panel: null, tool: null, warn: null, tileOv: {}, aide: true };
+  }
+
+  tools() {
+    return [
+      { id: 'format', nom: 'Format JSON / CSV', role: 'OUTIL', fait: 'Convertit une réponse brute en tableau propre.', recoit: 'Une réponse brute (JSON)', renvoie: 'Un tableau (CSV)', effet: 'journal',
+        options: [['Format de sortie', 'CSV'], ['Séparateur', ';']], testIn: '{"nom": "Club A", "ville": "Lyon"}', testOut: 'nom;ville\nClub A;Lyon' },
+      { id: 'traduction', nom: 'Traduction', role: 'OUTIL', fait: 'Traduit la requête ou les résultats, et garde toujours l\'original à côté.', recoit: 'Un texte, ou une liste de résultats', renvoie: 'Le même contenu, avec la traduction ajoutée à côté de l\'original', effet: 'journal',
+        options: [['Langue d\'entrée', 'détecter'], ['Traduire vers', 'français, anglais, allemand'], ['Ne pas traduire', 'les noms propres']], testIn: 'charpentier (français)', testOut: 'charpentier (fr, original)\nZimmermann (de)\ncarpenter (en)' },
+      { id: 'si', nom: 'Condition « si »', role: 'OUTIL', fait: 'Envoie les résultats vers une branche ou une autre selon un test.', recoit: 'Une liste de résultats', renvoie: 'Deux listes : oui et non', effet: 'compteur',
+        options: [['Si le champ', 'catégorie'], ['est égal à', 'association']], testIn: '3 résultats : 2 associations, 1 entreprise', testOut: 'oui : 2 résultats\nnon : 1 résultat' },
+      { id: 'boucle', nom: 'Boucle', role: 'OUTIL', fait: 'Répète une recherche pour chaque élément d\'une liste.', recoit: 'Une liste (villes, noms…)', renvoie: 'Les résultats de chaque tour, regroupés', effet: 'journal',
+        options: [['Répéter pour chaque', 'ville de la liste'], ['Maximum de tours', '50']], testIn: 'Liste de 3 villes', testOut: '3 recherches lancées\n3 réponses regroupées' },
+      { id: 'fusion', nom: 'Fusion / doublons', role: 'RAPPROCHER', fait: 'Regroupe les résultats qui parlent de la même entité.', recoit: 'Plusieurs listes de résultats', renvoie: 'Une seule liste sans doublons', effet: 'compteur',
+        options: [['Même entité si', 'nom et ville identiques'], ['En cas de doublon, garder', 'la source la plus fiable']], testIn: '5 résultats dont 2 doublons', testOut: '3 résultats' },
+      { id: 'filtre', nom: 'Filtre', role: 'OUTIL', fait: 'Garde seulement les résultats qui répondent à un critère.', recoit: 'Une liste de résultats', renvoie: 'La même liste, réduite', effet: 'compteur',
+        options: [['Garder si le champ', 'pays'], ['est égal à', 'FR']], testIn: '3 résultats : FR, FR, UK', testOut: '2 résultats : FR, FR' },
+      { id: 'attente', nom: 'Attente (quota)', role: 'OUTIL', fait: 'Fait patienter la recherche quand un quota est atteint.', recoit: 'Une recherche en cours', renvoie: 'La même recherche, reprise après l\'attente', effet: 'journal',
+        options: [['Quand le quota est atteint', 'attendre'], ['Attente maximale', '10 minutes']], testIn: 'Quota atteint à 14:02', testOut: 'Reprise à 14:12' },
+      { id: 'budget', nom: 'Compteur budget', role: 'OUTIL', fait: 'Arrête la recherche avant de dépasser le budget fixé.', recoit: 'Le coût de chaque appel payant', renvoie: 'Le même flux, ou un arrêt', effet: 'alerte',
+        options: [['Budget maximum', '5 € par mois'], ['À partir de 80 %', 'prévenir']], testIn: 'Dépensé ce mois : 4,10 €', testOut: 'Alerte : 82 % du budget' },
+      { id: 'ia', nom: 'Assistant IA', role: 'OUTIL', fait: 'Applique une opération d\'IA à ce qui a déjà été collecté. N\'ajoute aucune information nouvelle.', recoit: 'Une liste de résultats', renvoie: 'Les mêmes résultats, avec un champ ajouté et marqué « IA »', effet: 'alerte',
+        options: [['Op\u00e9ration', 'r\u00e9sumer'], ['Mod\u00e8le', 'local (Ollama)'], ['Marquer les r\u00e9sultats', 'oui \u2014 \u00ab produit par IA \u00bb']], testIn: '3 articles de presse', testOut: '3 articles + un r\u00e9sum\u00e9 marqu\u00e9 \u00ab IA \u00bb\nAucun fait ajout\u00e9' },
+      { id: 'rsshub', nom: 'RSSHub', role: 'OUTIL', fait: 'Transforme un site sans flux en flux RSS lisible.', recoit: 'L\'adresse d\'un site', renvoie: 'Un flux RSS', effet: 'rien',
+        options: [['Site à transformer', 'adresse du site'], ['Rafraîchir toutes les', '30 minutes']], testIn: 'Un site sans flux', testOut: 'Un flux RSS avec 20 articles' }
+    ];
+  }
+
+  openTool(mode, nom, etat) {
+    var code = 'def run(resultats):\n    # resultats : liste de dictionnaires\n    return [r for r in resultats if r.get("pays") == "FR"]';
+    if (mode === 'add') {
+      this.setState({ tool: { mode: 'add', kind: 'modele', modele: null, nom: '', role: 'OUTIL', fait: '', recoit: '', renvoie: '', effet: 'journal', options: [], code: code, testIn: '', testOut: '', etat: 'warn' } });
+      return;
+    }
+    var t = this.tools().filter(function (x) { return x.nom === nom; })[0];
+    this.setState({ tool: { mode: 'edit', kind: 'modele', modele: t.id, nom: t.nom, role: t.role, fait: t.fait, recoit: t.recoit, renvoie: t.renvoie, effet: t.effet, options: t.options, code: code, testIn: t.testIn, testOut: t.testOut, etat: etat } });
+  }
+
+  toolVals(accent) {
+    var self = this;
+    var p = this.state.tool;
+    var close = function () { self.setState({ tool: null }); };
+    if (!p) {
+      return { open: false, close: close, isEdit: false, isModele: false, isScript: false, title: '', sub: '', dotStyle: '', nom: '', fait: '', recoit: '', renvoie: '', code: '', testIn: '', testOut: '', effetText: '', hint: '', submitLabel: '', submitStyle: '', panelStyle: '', kindChips: [], modeleChips: [], roleChips: [], effetChips: [], etatChips: [], options: [] };
+    }
+    function set(obj) {
+      return function () { self.setState({ tool: Object.assign({}, self.state.tool, obj) }); };
+    }
+    function chip(label, on, fn) {
+      var base = 'height: 34px; padding: 0 14px; font-size: 13px; border-radius: var(--rayon-pilule); cursor: pointer; ';
+      return { label: label, pick: fn, style: base + (on
+        ? 'font-weight: 600; color: var(--accent-encre); background: var(--accent-fond); border: 1px solid ' + accent
+        : 'font-weight: 500; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort)') };
+    }
+    var all = this.tools();
+    var labels = { ok: 'opérationnel', warn: 'à vérifier', off: 'éteint' };
+    var isEdit = p.mode === 'edit';
+    var isScript = p.kind === 'script';
+    var ready = isScript || !!p.modele;
+    var effets = [['rien', 'Rien'], ['compteur', 'Compteur'], ['journal', 'Journal'], ['alerte', 'Alerte']];
+    var effetText = {
+      rien: 'L\'outil travaille en silence.',
+      compteur: 'Le Tableau de bord affiche un chiffre : combien de résultats entrent et combien sortent.',
+      journal: 'Chaque passage ajoute une ligne dans le journal du Tableau de bord.',
+      alerte: 'Le Tableau de bord affiche une alerte quand l\'outil le décide (budget, quota…).'
+    };
+    function pickModele(m) {
+      return set({ modele: m.id, role: m.role, fait: m.fait, recoit: m.recoit, renvoie: m.renvoie, effet: m.effet, options: m.options, testIn: m.testIn, testOut: m.testOut });
+    }
+    var scriptSample = { testIn: '3 résultats : FR, FR, UK', testOut: '2 résultats : FR, FR' };
+    var modeleNom = '';
+    all.forEach(function (m) { if (m.id === p.modele) modeleNom = m.nom; });
+
+    return {
+      open: true,
+      close: close,
+      isEdit: isEdit,
+      isModele: !isScript,
+      isScript: isScript,
+      title: isEdit ? p.nom : 'Nouvel outil',
+      sub: isEdit ? ('Modèle · ' + labels[p.etat]) : 'Choisis un modèle ou colle un script',
+      dotStyle: self.dot(p.etat),
+      nom: p.nom, fait: p.fait, recoit: p.recoit, renvoie: p.renvoie, code: p.code,
+      testIn: p.testIn || (isScript ? scriptSample.testIn : 'Choisis un modèle pour voir un exemple.'),
+      testOut: p.testOut || (isScript ? scriptSample.testOut : ''),
+      effetText: effetText[p.effet],
+      hint: (!isEdit && !ready) ? 'Choisis un modèle.' : '',
+      submitLabel: isEdit ? 'Enregistrer' : 'Créer l\'outil',
+      submitStyle: 'height: 40px; padding: 0 20px; font-size: 14px; font-weight: 500; border: none; border-radius: var(--rayon-controle); '
+        + ((isEdit || ready) ? 'color: var(--sur-accent); background: ' + accent + '; cursor: pointer' : 'color: var(--encre-pale); background: var(--trait); cursor: not-allowed'),
+      panelStyle: isEdit
+        ? 'position: absolute; top: 0; right: 0; bottom: 0; width: 520px; max-width: 100%; box-sizing: border-box; background: var(--surface); box-shadow: -8px 0 24px rgba(20,22,26,0.14); display: flex; flex-direction: column'
+        : 'position: absolute; top: 40px; left: 50%; transform: translateX(-50%); width: 640px; max-width: calc(100% - 32px); max-height: 1100px; box-sizing: border-box; background: var(--surface); border-radius: var(--rayon-tuile); box-shadow: 0 16px 48px rgba(20,22,26,0.28); display: flex; flex-direction: column; overflow: hidden',
+      kindChips: [
+        chip('À partir d\'un modèle', !isScript, set({ kind: 'modele' })),
+        chip('Script collé', isScript, set({ kind: 'script', testIn: scriptSample.testIn, testOut: scriptSample.testOut }))
+      ],
+      modeleChips: all.map(function (m) { return chip(m.nom, p.modele === m.id, pickModele(m)); }),
+      roleChips: ['OUTIL', 'RAPPROCHER', 'CATALOGUE'].map(function (r) { return chip(r, p.role === r, set({ role: r })); }),
+      effetChips: effets.map(function (e) { return chip(e[1], p.effet === e[0], set({ effet: e[0] })); }),
+      etatChips: [
+        chip('opérationnel', p.etat !== 'off', set({ etat: p.etat === 'off' ? 'ok' : p.etat })),
+        chip('éteint', p.etat === 'off', set({ etat: 'off' }))
+      ],
+      options: (p.options || []).map(function (o, i) { return { id: 'o-' + i, label: o[0], value: o[1] }; })
+    };
+  }
+
+  panelVals(defs, accent) {
+    var self = this;
+    var p = this.state.panel;
+    var empty = {
+      panelOpen: false, isEdit: false, isAdd: false,
+      panel: { title: '', sub: '', dotStyle: '', nom: '', pays: '', langue: '', quota: '', unite: '', desc: '' },
+      catChips: [], roleChips: [], costChips: [], origChips: [], etatChips: [], history: [],
+      hint: '', submitLabel: '', submitStyle: '', panelStyle: '',
+      closePanel: function () { self.setState({ panel: null }); }
+    };
+    if (!p) return empty;
+
+    function setP(k, v) {
+      return function () {
+        var np = Object.assign({}, self.state.panel);
+        np[k] = v;
+        self.setState({ panel: np });
+      };
+    }
+    function chip(label, on, fn) {
+      var base = 'height: 34px; padding: 0 14px; font-size: 13px; border-radius: var(--rayon-pilule); cursor: pointer; ';
+      return {
+        label: label,
+        pick: fn,
+        style: base + (on
+          ? 'font-weight: 600; color: var(--accent-encre); background: var(--accent-fond); border: 1px solid ' + accent
+          : 'font-weight: 500; color: var(--encre); background: var(--surface); border: 1px solid var(--trait-fort)')
+      };
+    }
+
+    var fiabDesc = {
+      A: 'A — Entièrement fiable : source officielle, recoupée, sans historique d\'erreur.',
+      B: 'B — Fiable d\'habitude : source établie, erreurs rares et corrigées.',
+      C: 'C — Assez fiable : source correcte mais déjà en défaut par le passé.',
+      D: 'D — Pas toujours fiable : source irrégulière, à recouper systématiquement.',
+      E: 'E — Non fiable : source peu fondée ou orientée.',
+      F: 'F — Fiabilité indéterminée : pas assez d\'historique pour juger.'
+    };
+    var labels = { ok: 'opérationnelle', warn: 'à vérifier', off: 'éteinte' };
+    var catName = '';
+    defs.forEach(function (d) { if (d[0] === p.cat) catName = d[1]; });
+    var isEdit = p.mode === 'edit';
+    var ready = !!(p.cat && p.role);
+
+    var roles = [['CHERCHER', 'CHERCHER'], ['VERIFIER', 'VÉRIFIER'], ['ENRICHIR', 'ENRICHIR'], ['CATALOGUE', 'CATALOGUE'], ['OUTIL', 'OUTIL'], ['RAPPROCHER', 'RAPPROCHER']];
+    var hist = {
+      ok: ['24/10 · test réussi · 12 résultats', '21/10 · test réussi · 9 résultats', '18/10 · clé refusée, puis corrigée'],
+      warn: ['Jamais testée avec une vraie requête.'],
+      off: ['Éteinte, aucun test récent.']
+    };
+
+    return {
+      panelOpen: true,
+      panelStyle: isEdit
+        ? 'position: absolute; top: 0; right: 0; bottom: 0; width: 480px; max-width: 100%; box-sizing: border-box; background: var(--surface); box-shadow: -8px 0 24px rgba(20,22,26,0.14); display: flex; flex-direction: column'
+        : 'position: absolute; top: 88px; left: 50%; transform: translateX(-50%); width: 600px; max-width: calc(100% - 32px); max-height: 1000px; box-sizing: border-box; background: var(--surface); border-radius: var(--rayon-tuile); box-shadow: 0 16px 48px rgba(20,22,26,0.28); display: flex; flex-direction: column; overflow: hidden',
+      isEdit: isEdit,
+      isAdd: !isEdit,
+      panel: {
+        title: isEdit ? p.nom : 'Nouvelle source',
+        sub: isEdit ? (catName + ' · ' + labels[p.etat]) : 'Choisis une catégorie et un rôle',
+        dotStyle: self.dot(p.etat),
+        nom: p.nom, pays: p.pays, langue: p.langue || '', quota: p.quota, unite: p.unite, desc: p.desc,
+        fiabDesc: fiabDesc[p.fiabilite] || fiabDesc.B
+      },
+      catChips: defs.map(function (d) { return chip(d[1], p.cat === d[0], setP('cat', d[0])); }),
+      roleChips: roles.map(function (r) { return chip(r[1], p.role === r[0], setP('role', r[0])); }),
+      costChips: ['gratuit', 'payant'].map(function (c) { return chip(c, p.cost === c, setP('cost', c)); }),
+      fiabChips: ['A', 'B', 'C', 'D', 'E', 'F'].map(function (l) { return chip(l, p.fiabilite === l, setP('fiabilite', l)); }),
+      etatChips: [
+        chip('opérationnelle', p.etat !== 'off', setP('etat', p.etat === 'off' ? 'ok' : p.etat)),
+        chip('éteinte', p.etat === 'off', setP('etat', 'off'))
+      ],
+      history: (hist[p.etat] || []).map(function (t) { return { t: t }; }),
+      hint: (!isEdit && !ready) ? 'Il manque la catégorie et le rôle.' : '',
+      submitLabel: isEdit ? 'Enregistrer' : 'Ajouter la source',
+      submitStyle: 'height: 40px; padding: 0 20px; font-size: 14px; font-weight: 500; border: none; border-radius: var(--rayon-controle); '
+        + ((isEdit || ready) ? 'color: var(--sur-accent); background: ' + accent + '; cursor: pointer' : 'color: var(--encre-pale); background: var(--trait); cursor: not-allowed'),
+      closePanel: function () { self.setState({ panel: null }); }
+    };
+  }
+
+  dot(etat) {
+    var map = { ok: 'var(--etat-ok)', warn: 'var(--etat-attention)', off: 'var(--encre-pale)' };
+    return 'width: 9px; height: 9px; border-radius: var(--rayon-pilule); flex-shrink: 0; background: ' + map[etat];
+  }
+
+  icons() {
+    return {"tableau-de-bord": "M4 20h16M7.5 20v-6M12 20V8M16.5 20v-9", "recherche": "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20.5 20.5L16 16", "reglages": "M12 9.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.64 5.64l1.84 1.84M16.52 16.52l1.84 1.84M18.36 5.64l-1.84 1.84M7.48 16.52l-1.84 1.84", "tri": "M7 4.5v15M7 4.5L4 7.5M7 4.5l3 3M17 19.5v-15M17 19.5l-3-3M17 19.5l3-3", "chercher": "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20.5 20.5L16 16", "verifier": "M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3zM9 12l2 2 4-4", "enrichir": "M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5", "catalogue": "M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4zM5 17a3 3 0 0 1 3-3h10", "outil": "M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6", "rapprocher": "M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1", "source": "M12 3.5c4.4 0 8 1.1 8 2.5s-3.6 2.5-8 2.5S4 7.4 4 6s3.6-2.5 8-2.5zM4 6v12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6M4 12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5", "saisie": "M4 9h16v6H4zM7.5 12h9", "grappe": "M12 4.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM6 13.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM18 13.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM10.2 10.2l-2.4 3.6M13.8 10.2l2.4 3.6", "quota": "M4 17.5a8 8 0 1 1 16 0M12 17.5l4.5-5", "cout": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM15.5 9.5A3.6 3.6 0 0 0 9.4 12a3.6 3.6 0 0 0 6.1 2.5M8 11h5.5M8 13h5.5", "ajouter": "M12 5v14M5 12h14", "modifier": "M4.5 19.5h4L19 9a2.83 2.83 0 0 0-4-4L4.5 15.5v4zM14 6l4 4", "retirer": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM8 12h8", "supprimer": "M5 7h14M9.5 7V4.5h5V7M6.5 7l.9 13h9.2l.9-13M10.5 11v5.5M13.5 11v5.5", "interrupteur": "M8 8h8a4 4 0 0 1 0 8H8a4 4 0 0 1 0-8zM16 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z", "lancer": "M8 5l11 7-11 7V5z", "tester": "M9.5 3h5M10.5 3v7.2l-4 7.6A2 2 0 0 0 8.3 21h7.4a2 2 0 0 0 1.8-3.2l-4-7.6V3M8.2 15h7.6", "reutiliser": "M20 12a8 8 0 1 1-2.4-5.7M20 4.5V9h-4.5", "ranger": "M4 5h6.5v6H4zM13.5 5H20v4h-6.5M13.5 11H20v8h-6.5zM4 13h6.5v6H4z", "deplier": "M6.5 9.5l5.5 5.5 5.5-5.5", "fermer": "M6.5 6.5l11 11M17.5 6.5l-11 11", "filtrer": "M4 5.5h16l-6.2 7.2V19L10.2 17v-4.3L4 5.5z", "pays": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM4 12h16M12 4c2.2 2.2 3.4 5 3.4 8s-1.2 5.8-3.4 8c-2.2-2.2-3.4-5-3.4-8S9.8 6.2 12 4z", "aide": "M12 4.5c-4.1 0-7.5 2.8-7.5 6.2 0 1.9 1 3.6 2.7 4.7L6.5 19.5l3.9-2c.5.1 1.1.1 1.6.1 4.1 0 7.5-2.8 7.5-6.2S16.1 4.5 12 4.5z", "attention": "M12 4.6L20.8 19.4H3.2L12 4.6zM12 10.2v4.1M12 16.9v.1", "ia": "M10.5 4.5c0 3.3 1.2 4.5 4.5 4.5-3.3 0-4.5 1.2-4.5 4.5 0-3.3-1.2-4.5-4.5-4.5 3.3 0 4.5-1.2 4.5-4.5zM17 13.5c0 2.2.8 3 3 3-2.2 0-3 .8-3 3 0-2.2-.8-3-3-3 2.2 0 3-.8 3-3z"};
+  }
+
+  pill(bg, fg, weight) {
+    return 'font-size: 12px; font-weight: ' + weight + '; letter-spacing: 0.02em; padding: 4px 10px; border-radius: var(--rayon-pilule); white-space: nowrap; flex-shrink: 0; background: ' + bg + '; color: ' + fg;
+  }
+
+  flagStyle(flag) {
+    var map = {
+      'CHERCHER':  ['var(--role-chercher-fond)', 'var(--role-chercher)'],
+      'VERIFIER':  ['var(--role-verifier-fond)', 'var(--role-verifier)'],
+      'ENRICHIR':  ['var(--role-enrichir-fond)', 'var(--role-enrichir)'],
+      'CATALOGUE': ['var(--role-catalogue-fond)', 'var(--role-catalogue)'],
+      'OUTIL':     ['var(--role-outil-fond)', 'var(--role-outil)'],
+      'RAPPROCHER': ['var(--role-rapprocher-fond)', 'var(--role-rapprocher)']
+    };
+    var key = flag.replace('É', 'E');
+    var c = map[key] || map['OUTIL'];
+    return this.pill(c[0], c[1], '600');
+  }
+
+  costStyle(cost) {
+    return cost === 'payant'
+      ? this.pill('var(--etat-attention-fond)', 'var(--etat-attention)', '500')
+      : this.pill('var(--etat-ok-fond)', 'var(--etat-ok-encre)', '500');
+  }
+
+  // quota: [utilisé, plafond, unité] ou null (illimité)
+  quotaView(etat, q) {
+    var textBase = 'font-size: 12px; font-variant-numeric: tabular-nums; ';
+    if (etat === 'off') {
+      return { text: 'éteinte', textStyle: textBase + 'color: var(--encre-pale)', bar: 'display: block; height: 4px; width: 0%' };
+    }
+    if (!q) {
+      return { text: 'illimité', textStyle: textBase + 'color: var(--encre-douce)', bar: 'display: block; height: 4px; width: 0%' };
+    }
+    var pct = Math.min(100, Math.round(q[0] / q[1] * 100));
+    var hot = pct >= 80;
+    var fmt = function (n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); };
+    return {
+      text: fmt(q[0]) + ' / ' + fmt(q[1]) + ' · ' + q[2],
+      textStyle: textBase + (hot ? 'color: var(--etat-attention); font-weight: 600' : 'color: var(--encre-douce)'),
+      bar: 'display: block; height: 4px; border-radius: var(--rayon-pilule); width: ' + pct + '%; background: ' + (hot ? 'var(--etat-attention)' : 'var(--accent)')
+    };
+  }
+
+  makeRows(defs, catId) {
+    var self = this;
+    var labels = { ok: 'opérationnelle', warn: 'à vérifier', off: 'éteinte' };
+    return defs.map(function (d) {
+      var qv = self.quotaView(d[1], d[5]);
+      return {
+        nom: d[0],
+        etat: labels[d[1]],
+        dotStyle: self.dot(d[1]),
+        cost: d[2],
+        costStyle: self.costStyle(d[2]),
+        flag: d[3],
+        flagStyle: self.flagStyle(d[3]),
+        pays: d[4],
+        quotaText: qv.text,
+        quotaTextStyle: qv.textStyle,
+        barStyle: qv.bar,
+        edit: function () {
+          self.setState({ panel: {
+            mode: 'edit',
+            nom: d[0],
+            cat: catId,
+            role: d[3].replace('É', 'E'),
+            cost: d[2],
+            fiabilite: (catId === 'web' || catId === 'presse') ? 'D' : 'B',
+            pays: d[4],
+            etat: d[1],
+            quota: d[5] ? String(d[5][1]) : '',
+            unite: d[5] ? d[5][2] : '',
+            desc: d[0] === 'GDELT' ? 'Acteurs cités dans la presse mondiale. Pas encore testée.' : ''
+          } });
+        }
+      };
+    });
+  }
+
+  renderVals() {
+    var self = this;
+    var defs = [
+      ['web', 'Web', [
+        ['SearXNG (auto-hébergé)', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Tavily', 'ok', 'payant', 'CHERCHER', 'Mondial', [812, 1000, 'mois']],
+        ['Parallel Search', 'ok', 'gratuit', 'CHERCHER', 'Mondial', [41, 100, 'jour']],
+        ['Memento TimeTravel', 'ok', 'gratuit', 'VÉRIFIER', 'Mondial', null],
+        ['Exa', 'warn', 'gratuit', 'CHERCHER', 'Mondial', [0, 1000, 'mois']],
+        ['Serper', 'off', 'payant', 'CHERCHER', 'Mondial', null]
+      ]],
+      ['orgs', 'Organisations officielles', [
+        ['OCDS Data Registry', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['TED — marchés publics UE', 'ok', 'gratuit', 'CHERCHER', 'UE', null],
+        ['data.europa.eu', 'ok', 'gratuit', 'CATALOGUE', 'UE', null],
+        ['org-id.guide', 'off', 'gratuit', 'CATALOGUE', 'Mondial', null],
+        ['Govdirectory', 'off', 'gratuit', 'CHERCHER', 'Mondial', null]
+      ]],
+      ['assos', 'Associations', [
+        ['DILA — JOAFE', 'ok', 'gratuit', 'CHERCHER', 'FR', null],
+        ['Charity Commission', 'ok', 'gratuit', 'CHERCHER', 'UK', null],
+        ['ProPublica Nonprofit', 'ok', 'gratuit', 'CHERCHER', 'US', null],
+        ['IRS — BMF / 990', 'ok', 'gratuit', 'CHERCHER', 'US', null],
+        ['ACNC Charity Register', 'ok', 'gratuit', 'CHERCHER', 'AU', null],
+        ['Charities Register', 'ok', 'gratuit', 'CHERCHER', 'NZ', null],
+        ['360Giving GrantNav', 'warn', 'gratuit', 'CHERCHER', 'UK', null],
+        ['LittleSis', 'off', 'gratuit', 'ENRICHIR', 'US', null]
+      ]],
+      ['entreprises', 'Entreprises', [
+        ['Companies House', 'ok', 'gratuit', 'CHERCHER', 'UK', [188, 600, '5 min']],
+        ['BODACC', 'ok', 'gratuit', 'CHERCHER', 'FR', null],
+        ['Finlande — PRH', 'ok', 'gratuit', 'CHERCHER', 'FI', null],
+        ['info-financière (AMF)', 'ok', 'gratuit', 'CHERCHER', 'FR', null],
+        ['OpenSanctions', 'ok', 'payant', 'VÉRIFIER', 'Mondial', [4120, 5000, 'mois']],
+        ['CourtListener', 'ok', 'gratuit', 'VÉRIFIER', 'US', [1210, 5000, 'heure']],
+        ['Wikidata (SPARQL)', 'ok', 'gratuit', 'RAPPROCHER', 'Mondial', null],
+        ['Suisse — Zefix', 'warn', 'gratuit', 'CHERCHER', 'CH', null],
+        ['CompanyScope', 'off', 'gratuit', 'ENRICHIR', 'Mondial', null]
+      ]],
+      ['rs', 'Réseaux sociaux', [
+        ['Mobilizon', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Mastodon — hashtags', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Bluesky', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Lemmy', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Matrix — via SearXNG', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['Apify', 'warn', 'payant', 'CHERCHER', 'Mondial', [0, 5, '$ mois']],
+        ['Telegram', 'off', 'gratuit', 'CHERCHER', 'Mondial', null]
+      ]],
+      ['lieux', 'Lieux', [
+        ['Overpass (auto-hébergé)', 'ok', 'gratuit', 'CHERCHER', 'FR', null],
+        ['Nominatim', 'ok', 'gratuit', 'ENRICHIR', 'Mondial', [1, 1, 'seconde']],
+        ['Photon', 'ok', 'gratuit', 'ENRICHIR', 'Mondial', null],
+        ['geoBoundaries', 'ok', 'gratuit', 'ENRICHIR', 'Mondial', null],
+        ['OpenAddresses', 'off', 'gratuit', 'ENRICHIR', 'Mondial', null],
+        ['GeoNames', 'off', 'gratuit', 'ENRICHIR', 'Mondial', null]
+      ]],
+      ['presse', 'Presse', [
+        ['Media Cloud', 'ok', 'gratuit', 'CHERCHER', 'Mondial', [14, 1000, 'semaine']],
+        ['GDELT', 'ok', 'gratuit', 'CHERCHER', 'Mondial', null],
+        ['radio-browser', 'ok', 'gratuit', 'CATALOGUE', 'Mondial', null],
+        ['The Guardian', 'warn', 'gratuit', 'CHERCHER', 'UK', [0, 500, 'jour']],
+        ['API Radio France', 'off', 'gratuit', 'CHERCHER', 'FR', null]
+      ]],
+      ['perso', 'Personnalisé', [
+        ['Mon script communes.py', 'ok', 'gratuit', 'CHERCHER', 'FR', null],
+        ['Base SQLite locale', 'off', 'gratuit', 'ENRICHIR', '—', null]
+      ]]
+    ];
+
+    var tileDefs = [
+      ['Format JSON / CSV', 'ok', 'OUTIL', 'Convertit une réponse brute en tableau propre.'],
+      ['Traduction', 'ok', 'OUTIL', 'Traduit la requête ou les résultats, et garde toujours l\'original à côté.'],
+      ['Condition « si »', 'ok', 'OUTIL', 'Envoie les résultats vers une branche ou une autre selon un test.'],
+      ['Boucle', 'ok', 'OUTIL', 'Répète une recherche pour chaque élément d\'une liste.'],
+      ['Fusion / doublons', 'ok', 'RAPPROCHER', 'Regroupe les résultats qui parlent de la même entité.'],
+      ['Filtre', 'ok', 'OUTIL', 'Garde seulement les résultats qui répondent à un critère.'],
+      ['Attente (quota)', 'off', 'OUTIL', 'Fait patienter la recherche quand un quota est atteint.'],
+      ['Compteur budget', 'off', 'OUTIL', 'Arrête la recherche avant de dépasser le budget fixé.'],
+      ['RSSHub', 'off', 'OUTIL', 'Transforme un site sans flux en flux RSS lisible.'],
+      ['Assistant IA', 'off', 'OUTIL', 'Applique une opération d\'IA à ce qui a déjà été collecté. N\'ajoute aucune information nouvelle.', [
+        'Ce que cette tuile produit ne vient d\'aucune source : c\'est une IA qui l\'écrit.',
+        'Le résultat peut changer d\'un lancement à l\'autre, avec la même question et les mêmes données.',
+        'Une IA peut écrire quelque chose de faux avec assurance. Rien de ce qu\'elle produit ne compte comme un fait vérifié.',
+        'Tout ce qui sort de cette tuile est marqué « IA » dans la grappe, et le reste à chaque étape.'
+      ]]
+    ];
+
+    var accent = this.props.accent || '#2563A8';
+    var ICO = this.icons();
+    var labels = { ok: 'opérationnelle', warn: 'à vérifier', off: 'éteinte' };
+    var labelsOutil = { ok: 'opérationnel', warn: 'à vérifier', off: 'éteint' };
+
+    var nSources = 0, nActives = 0;
+    defs.forEach(function (d) {
+      d[2].forEach(function (r) { nSources++; if (r[1] !== 'off') nActives++; });
+    });
+    var nTiles = tileDefs.length;
+    var nTilesOn = tileDefs.filter(function (t) { return t[1] !== 'off'; }).length;
+
+    var cats = defs.map(function (d) {
+      var id = d[0];
+      var isOpen = self.state.open === id;
+      var act = d[2].filter(function (r) { return r[1] !== 'off'; }).length;
+      return {
+        id: id,
+        name: d[1],
+        summary: d[2].length + ' sources · ' + act + ' allumées',
+        open: isOpen,
+        rows: self.makeRows(d[2], id),
+        cardStyle: 'background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-carte); overflow: hidden; '
+          + (isOpen ? 'box-shadow: var(--ombre-carte); border-left: 3px solid ' + accent + ';' : ''),
+        chevStyle: 'display: inline-flex; flex-shrink: 0; transition: transform 120ms ease; '
+          + (isOpen ? 'transform: rotate(0deg);' : 'transform: rotate(-90deg);'),
+        toggle: function () {
+          self.setState({ open: self.state.open === id ? null : id });
+        }
+      };
+    });
+
+    var tileOv = self.state.tileOv || {};
+    var tiles = tileDefs.map(function (t) {
+      var et = tileOv[t[0]] || t[1];
+      return {
+        nom: t[0],
+        etat: labelsOutil[et],
+        dotStyle: self.dot(et),
+        flag: t[2],
+        flagStyle: self.flagStyle(t[2]),
+        desc: t[3],
+        action: et === 'off' ? 'Allumer' : 'Éteindre',
+        toggle: function () {
+          if (et === 'off' && t[4]) { self.setState({ warn: { nom: t[0], points: t[4] } }); return; }
+          var ov = Object.assign({}, self.state.tileOv);
+          ov[t[0]] = et === 'off' ? 'ok' : 'off';
+          self.setState({ tileOv: ov });
+        },
+        edit: function () { self.openTool('edit', t[0], et); },
+        cardStyle: 'background: var(--surface); border: 1px solid var(--trait); border-radius: var(--rayon-carte); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 3px rgba(20,22,26,0.05)'
+      };
+    });
+
+    var w = self.state.warn;
+    var warn = w ? {
+      title: 'Allumer « ' + w.nom + ' » ?',
+      icon: ICO['attention'],
+      points: (w.points || []).map(function (txt) { return { txt: txt }; }),
+      go: function () {
+        var ov = Object.assign({}, self.state.tileOv);
+        ov[w.nom] = 'ok';
+        self.setState({ tileOv: ov, warn: null });
+      },
+      close: function () { self.setState({ warn: null }); }
+    } : { title: '', icon: '', points: [], go: function () {}, close: function () {} };
+
+    var neutrePill = 'font-size: 11px; font-weight: 600; letter-spacing: 0.02em; padding: 3px 9px; border-radius: var(--rayon-pilule); white-space: nowrap; flex-shrink: 0; background: var(--surface-creuse); color: var(--encre-pale)';
+    var aidePlan = [
+        { nom: "DILA — JOAFE", role: "CHERCHER" },
+        { nom: "Nominatim", role: "ENRICHIR" },
+        { nom: "Fusion / doublons", role: "RAPPROCHER" }
+    ].map(function (p) {
+      var neutre = p.role === 'ENTRÉE' || p.role === 'GRAPPES';
+      return { nom: p.nom, flag: p.role, flagStyle: neutre ? neutrePill : self.flagStyle(p.role).replace('font-size: 12px', 'font-size: 11px') };
+    });
+    var aide = {
+      intro: "Je connais tes sources, tes outils et ton plan de travail. Je ne cherche pas à ta place : je te dis quoi poser, et pourquoi.",
+      q1: "source ou outil, je mets quoi où ?", a1: "Une source va chercher dehors : elle a un coût et un quota. Un outil transforme ce qui est déjà rentré : gratuit, sans quota. Pour les associations françaises, tu es déjà équipé :",
+      plan: aidePlan, planGo: "Ouvrir la Recherche",
+      q2: "pourquoi Assistant IA est éteint ?", a2: "Parce que ce qu'il écrit ne vient d'aucune source et peut changer d'un lancement à l'autre. Tu peux l'allumer, mais tout ce qu'il produit reste marqué « IA » et ne compte jamais comme un fait vérifié.",
+      chips: ["Comment je fais…", "Pourquoi ça n'a rien donné ?", "Ça veut dire quoi…"].map(function (c) { return { label: c }; }),
+      reduce: function () { self.setState({ aide: false }); },
+      ouvrir: function () { self.setState({ aide: true }); }
+    };
+
+    var navBase = 'display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 14px; border-bottom: 2px solid transparent; ';
+    var tabs = [
+      { label: 'Tableau de bord', icon: ICO['tableau-de-bord'], later: false, style: navBase + 'color: var(--encre-douce)' },
+      { label: 'Recherche', icon: ICO['recherche'], later: false, style: navBase + 'color: var(--encre-douce)' },
+      { label: 'Réglages', icon: ICO['reglages'], later: false, style: navBase + 'color: var(--encre); font-weight: 600; border-bottom-color: ' + accent },
+      { label: 'Tri', icon: ICO['tri'], later: false, style: navBase + 'color: var(--encre-douce)' }
+    ];
+
+    var subBase = 'height: 36px; padding: 0 16px; font-size: 14px; border: none; border-radius: var(--rayon-controle); cursor: pointer; display: flex; align-items: center; gap: 8px; ';
+    function sub(id, label, count, icon) {
+      var on = self.state.sub === id;
+      return {
+        label: label,
+        icon: icon,
+        count: count,
+        style: subBase + (on ? 'background: var(--surface); color: var(--encre); font-weight: 600; box-shadow: 0 1px 2px rgba(20,22,26,0.12)' : 'background: transparent; color: var(--encre-douce); font-weight: 500'),
+        countStyle: 'font-size: 12px; font-weight: 500; color: var(--encre-pale)',
+        go: function () { self.setState({ sub: id }); }
+      };
+    }
+    var subs = [sub('sources', 'Sources', nSources, ICO['source']), sub('outils', 'Outils', nTiles, ICO['outil'])];
+
+    var onSources = this.state.sub === 'sources';
+    var pv = this.panelVals(defs, accent);
+    var tv = this.toolVals(accent);
+    return {
+      tv: tv,
+      panelOpen: pv.panelOpen, isEdit: pv.isEdit, isAdd: pv.isAdd, panel: pv.panel,
+      catChips: pv.catChips, roleChips: pv.roleChips, costChips: pv.costChips,
+      fiabChips: pv.fiabChips, etatChips: pv.etatChips, history: pv.history,
+      hint: pv.hint, submitLabel: pv.submitLabel, submitStyle: pv.submitStyle, panelStyle: pv.panelStyle,
+      closePanel: pv.closePanel,
+      openAdd: function () {
+        if (self.state.sub !== 'sources') { self.openTool('add'); return; }
+        self.setState({ panel: { mode: 'add', nom: '', cat: null, role: null, cost: 'gratuit', fiabilite: 'B', pays: '', langue: '', etat: 'warn', quota: '', unite: '', desc: '' } });
+      },
+      accent: accent,
+      tabs: tabs,
+      subs: subs,
+      cats: cats,
+      tiles: tiles,
+      aideOpen: !!self.state.aide,
+      aideMin: !self.state.aide,
+      aide: aide,
+      warnOpen: !!w,
+      warn: warn,
+      showSources: onSources,
+      showOutils: !onSources,
+      addLabel: onSources ? 'Ajouter une source' : 'Ajouter un outil',
+      subtitle: onSources
+        ? defs.length + ' catégories · ' + nSources + ' sources · ' + nActives + ' allumées'
+        : nTiles + ' outils · ' + nTilesOn + ' allumés'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# Principaux établissements d'enseignement supérieur (Ministère de l'Enseignement supérieur, de la Recherche et de
+# l'Espace). Source : catalogue data.gouv.fr, jeu 586dae5ea3a7290df6f4be88, servi par l'API Explore v2.1 d'Opendatasoft
+# (data.enseignementsup-recherche.gouv.fr). Registre officiel ; porte aussi des identifiants Wikidata/SIREN, mais le
+# nom, la commune et le site viennent du ministère.
+id: esr_etablissements
+type: registre
+public: true
+description: "Principaux établissements d'enseignement supérieur (ESR)"
+url: https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-principaux-etablissements-enseignement-superieur/records
+format: json
+type_fixe: établissement d'enseignement supérieur  # ce que recense le jeu ; sert au vérificateur de type (D69)
+params:
+  where: 'search("{requete}")'
+  limit: "100"
+response: {items: results}
+fields:
+  nom: uo_lib
+  id: etablissement_id_paysage
+  ville: com_nom
+  site: url
+  siren: siren[0]
+relaxation: 2

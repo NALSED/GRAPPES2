@@ -1,0 +1,5 @@
+# Babelscape/wikineural-multilingual-ner : 9 langues, pour un sujet qui change de langue. Désactivé par défaut.
+nom: Babelscape/wikineural-multilingual-ner
+agregation: simple
+categories: {ORG: [ORG]}
+langues: [de, en, es, fr, it, nl, pl, pt, ru]

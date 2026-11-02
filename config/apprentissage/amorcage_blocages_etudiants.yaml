@@ -1,0 +1,82 @@
+grappe: blocages_etudiants
+termes:
+  acteur:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  acteurs:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  annonce:
+    poids: 0.2178
+    ajoute_cycle: 9
+    vu_cycle: 9
+  blocage:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  blocages:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  etudiant:
+    poids: 0.2222
+    ajoute_cycle: 9
+    vu_cycle: 9
+  etudiante:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  etudiantes:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  etudiants:
+    poids: 0.2378
+    ajoute_cycle: 9
+    vu_cycle: 9
+  france:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  gouvernement:
+    poids: 0.2178
+    ajoute_cycle: 9
+    vu_cycle: 9
+  lyceen:
+    poids: 0.2156
+    ajoute_cycle: 9
+    vu_cycle: 9
+  lyceenne:
+    poids: 0.2311
+    ajoute_cycle: 9
+    vu_cycle: 9
+  lyceens:
+    poids: 0.2333
+    ajoute_cycle: 9
+    vu_cycle: 9
+  lycees:
+    poids: 0.2156
+    ajoute_cycle: 9
+    vu_cycle: 9
+  mobilisation:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  mobilisations:
+    poids: 0.4
+    ajoute_cycle: 9
+    vu_cycle: 9
+  mouvement:
+    poids: 0.2333
+    ajoute_cycle: 9
+    vu_cycle: 9
+  nationale:
+    poids: 0.2222
+    ajoute_cycle: 9
+    vu_cycle: 9
+  occasion:
+    poids: 0.2156
+    ajoute_cycle: 9
+    vu_cycle: 9

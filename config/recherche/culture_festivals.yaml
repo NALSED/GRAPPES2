@@ -1,0 +1,17 @@
+# Liste des festivals en France (Ministère de la Culture, DGCA/DGMIC, ~7 300 festivals). Source : catalogue data.gouv.fr,
+# jeu 62cf95993d99f22480f49334, ressource CSV 47ac11c2-8a00-46a7-9fa8-9b802643f975. Fichier téléchargé une fois (cache),
+# filtré en local : tous les mots de la requête doivent figurer dans une ligne.
+id: culture_festivals
+type: registre
+public: true
+description: "Liste des festivals en France (Ministère de la Culture)"
+url: https://static.data.gouv.fr/resources/liste-des-festivals-en-france/20250827-132958/festivals-global-festivals-pl.csv
+format: csv
+type_fixe: festival  # ce que recense le jeu de données ; sert au vérificateur de type (D69)
+delimiter: ";"
+fields:
+  nom: "Nom du festival"
+  id: "Identifiant"
+  ville: "Commune principale de déroulement"
+  site: "Site internet du festival"
+relaxation: 2

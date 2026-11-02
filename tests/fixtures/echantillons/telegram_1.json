@@ -1,0 +1,70 @@
+{
+  "name": "Canal Demo A",
+  "type": "public_channel",
+  "id": 1000000001,
+  "messages": [
+    {
+      "id": 1,
+      "type": "service",
+      "date": "2026-09-01T08:00:00",
+      "date_unixtime": "1788249600",
+      "action": "create_channel"
+    },
+    {
+      "id": 2,
+      "type": "message",
+      "date": "2026-09-02T09:15:00",
+      "date_unixtime": "1788340500",
+      "from": "Canal Demo A",
+      "from_id": "channel1000000001",
+      "text": [
+        "Nouvel article sur le jardinage : ",
+        {"type": "link", "text": "https://exemple-a.example.test/articles/jardin-1"},
+        " merci à ",
+        {"type": "mention", "text": "@compte_demo_a"},
+        " ",
+        {"type": "hashtag", "text": "#jardinage"}
+      ],
+      "text_entities": [
+        {"type": "plain", "text": "Nouvel article sur le jardinage : "},
+        {"type": "link", "text": "https://exemple-a.example.test/articles/jardin-1"},
+        {"type": "plain", "text": " merci à "},
+        {"type": "mention", "text": "@compte_demo_a"},
+        {"type": "plain", "text": " "},
+        {"type": "hashtag", "text": "#jardinage"}
+      ]
+    },
+    {
+      "id": 3,
+      "type": "message",
+      "date": "2026-09-03T18:30:00",
+      "date_unixtime": "1788460200",
+      "from": "Canal Demo A",
+      "from_id": "channel1000000001",
+      "forwarded_from": "Canal Demo B",
+      "reply_to_message_id": 2,
+      "text": "Invitation : https://t.me/+AbCdEf0123456 et canal ami https://t.me/canal_demo_b",
+      "text_entities": [
+        {"type": "plain", "text": "Invitation : "},
+        {"type": "link", "text": "https://t.me/+AbCdEf0123456"},
+        {"type": "plain", "text": " et canal ami "},
+        {"type": "link", "text": "https://t.me/canal_demo_b"}
+      ]
+    },
+    {
+      "id": 4,
+      "type": "message",
+      "date": "2026-09-04T07:45:00",
+      "date_unixtime": "1788507900",
+      "from": "Canal Demo A",
+      "from_id": "channel1000000001",
+      "photo": "(File not included. Change data exporting settings to download.)",
+      "width": 800,
+      "height": 600,
+      "text": "Բարի լույս, друзья: թեստ կիսալատինական տեքստ",
+      "text_entities": [
+        {"type": "plain", "text": "Բարի լույս, друзья: թեստ կիսալատինական տեքստ"}
+      ]
+    }
+  ]
+}

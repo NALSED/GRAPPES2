@@ -1,0 +1,30 @@
+# Flux RSS public de L'Étudiant (https://www.letudiant.fr/rss.xml).
+# Écosystème « rss », distinct de « web » : chaque élément du flux est ingéré tel quel (titre + résumé), au nom du
+# média ; aucune page n'est récupérée. Le flux n'a pas de requête : il est lu une fois par exécution, et seuls
+# les éléments assez proches d'un sujet sont retenus. `robots.txt` est consulté avant la lecture.
+# À vérifier par Sednal : les conditions d'usage du flux (aucune mention restrictive dans le flux lui-même).
+# Supprimable sans rien casser : retirer ce fichier et son id de `actifs` (config/recherche.yaml).
+id: rss_letudiant
+type: http
+public: true
+url: https://www.letudiant.fr/rss.xml
+method: GET
+respecter_robots: true
+sans_mots_cles: true
+limite_resultats: 50
+headers:
+  User-Agent: "grappes-collecte/1 (collecte automatique ; respecte robots.txt)"
+  Accept: "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8"
+response: {format: xml, items: rss.channel.item}
+fields:
+  title: title
+  url: link
+  description: description
+  date: pubDate
+  id: guid
+observation:
+  ecosysteme: rss
+  source: {default: letudiant.fr}
+  nom: {default: "L'Étudiant"}
+quota: 2
+raison: "élément du flux L'Étudiant"

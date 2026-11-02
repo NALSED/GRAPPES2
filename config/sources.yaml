@@ -1,0 +1,5 @@
+defaults:
+  x: 1.0
+  telegram: 1.0
+  web: 1.0
+overrides: {}

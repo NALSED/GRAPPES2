@@ -1,0 +1,59 @@
+<!-- @dsCard group="Structure" height=420 subtitle="Deux fiches côte à côte, l'accord et le désaccord lus d'un coup d'œil" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.carte{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-tuile);box-shadow:var(--ombre-carte);overflow:hidden}
+.tete{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--trait)}
+.ic{display:inline-flex;color:var(--role-rapprocher)}
+.titre{font-size:15px;font-weight:600;flex-grow:1}
+.conf{display:flex;align-items:center;gap:10px}
+.lbl{font-size:12px;color:var(--encre-douce)}
+.barre{width:90px;height:8px;border-radius:999px;background:var(--surface-page);overflow:hidden;display:inline-block}
+.barre > span{display:block;height:100%;border-radius:999px}
+.pct{font-size:13px;font-weight:600;min-width:38px;text-align:right}
+.corps{display:grid;grid-template-columns:1fr 1fr}
+.col{padding:16px 20px;border-right:1px solid var(--trait)}
+.col:last-child{border-right:none}
+.src{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.src-nom{font-size:13px;font-weight:600;color:var(--encre-douce)}
+.fiab{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-page);color:var(--encre-douce)}
+.ligne{display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+.cle{width:86px;flex-shrink:0;font-size:12px;color:var(--encre-pale)}
+.val{font-size:13px}
+.ok{color:var(--etat-ok-encre);font-weight:600;background:var(--etat-ok-fond);padding:1px 6px;border-radius:4px}
+.diff{color:var(--etat-attention);background:var(--etat-attention-fond);padding:1px 6px;border-radius:4px}
+.absent{color:var(--encre-pale);font-style:italic}
+.pied{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--surface-creuse)}
+.b1{height:40px;padding:0 18px;font:inherit;font-size:14px;font-weight:500;color:var(--sur-accent);background:var(--accent);border:none;border-radius:var(--rayon-controle);cursor:pointer}
+.b2{height:40px;padding:0 18px;font:inherit;font-size:14px;color:var(--encre);background:var(--surface);border:1px solid var(--trait-fort);border-radius:var(--rayon-controle);cursor:pointer}
+</style>
+<div class="carte">
+  <div class="tete">
+    <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1"/></svg></span>
+    <span class="titre">Rapprochement — identifiant SIREN identique</span>
+    <div class="conf">
+      <span class="lbl">Confiance</span>
+      <span class="barre"><span style="width:95%;background:var(--etat-ok)"></span></span>
+      <span class="pct">95&nbsp;%</span>
+    </div>
+  </div>
+  <div class="corps">
+    <div class="col">
+      <div class="src"><span class="src-nom">API Recherche d'entreprises</span><span class="fiab">Fiabilité A</span></div>
+      <div class="ligne"><span class="cle">Nom</span><span class="val ok">Coopérative du Grésivaudan</span></div>
+      <div class="ligne"><span class="cle">Ville</span><span class="val ok">Grenoble</span></div>
+      <div class="ligne"><span class="cle">Identifiant</span><span class="val ok">501 234 567</span></div>
+    </div>
+    <div class="col">
+      <div class="src"><span class="src-nom">DILA — JOAFE</span><span class="fiab">Fiabilité B</span></div>
+      <div class="ligne"><span class="cle">Nom</span><span class="val ok">Coopérative du Grésivaudan</span></div>
+      <div class="ligne"><span class="cle">Ville</span><span class="val ok">Grenoble</span></div>
+      <div class="ligne"><span class="cle">Identifiant</span><span class="val ok">501 234 567</span></div>
+    </div>
+  </div>
+  <div class="pied">
+    <button class="b1" type="button">Confirmer</button>
+    <button class="b2" type="button">Séparer</button>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+{
+ "methode": "aucune",
+ "valide": false,
+ "note": "Pas de calibration valide : l'indice n'a pas de pouvoir discriminant mesurable contre la référence (Brier validation 0,0234 contre 0,0229 pour le prédicteur constant, docs/conception/calibration.md § 8). Le score affiché est p = LR/(1+LR) (rapport de cotes a priori 1:1), une estimation étendue, jamais une mesure.",
+ "ajustement_platt_non_valide": {
+  "a": 1.0992669423838983,
+  "b": -4.304908119010396,
+  "echantillon": 5215,
+  "positifs": 87,
+  "ece": 0.0008043002618802325,
+  "brier": 0.01634465333613848,
+  "brier_constant": 0.01640433552818452,
+  "sujets": "dev + validation, sans Wikidata"
+ }
+}

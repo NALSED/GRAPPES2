@@ -1,0 +1,12 @@
+# Exemple 2 : flux RSS/Atom, sans clé. Les flux XML sont lus sans DTD ni entités (DOCTYPE refusé).
+id: flux_rss_exemple
+type: http
+url: https://flux.exemple.test/rss
+params: {q: "{mots_cles}"}
+response: {format: xml, items: rss.channel.item}      # Atom : items: feed.entry, url: link.@href
+fields:
+  title: title
+  url: link
+  id: guid
+  description: description
+  date: pubDate

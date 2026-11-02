@@ -1,0 +1,16 @@
+<!-- @dsCard group="Structure" height=150 subtitle="Quatre onglets, dans cet ordre" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.stack{display:flex;flex-direction:column;gap:14px}
+.lab{color:var(--encre-pale);display:block}
+.bar{background:var(--surface);border:1px solid var(--trait);border-radius:var(--rayon-carte);
+padding:0 12px;display:flex;gap:4px;height:52px;align-items:stretch}
+.t{display:inline-flex;align-items:center;gap:8px;padding:0 14px;background:none;border:none;
+border-bottom:2px solid transparent;color:var(--encre-douce);font-family:inherit;cursor:pointer}
+.act{color:var(--encre);font-weight:600;border-bottom-color:var(--accent)}
+.plus{color:var(--encre-pale);cursor:default}
+.pl{color:var(--encre-pale)}
+</style>
+<div class="stack"><div class="bar"><button type="button" class="t  controle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7.5 20v-6M12 20V8M16.5 20v-9"/></svg>Tableau de bord</button><button type="button" class="t act controle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20.5 20.5L16 16"/></svg>Recherche</button><button type="button" class="t  controle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9.6a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8zM12 3v2.6M12 18.4V21M3 12h2.6M18.4 12H21M5.64 5.64l1.84 1.84M16.52 16.52l1.84 1.84M18.36 5.64l-1.84 1.84M7.48 16.52l-1.84 1.84"/></svg>Réglages</button><button type="button" class="t plus controle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15M7 4.5L4 7.5M7 4.5l3 3M17 19.5v-15M17 19.5l-3-3M17 19.5l3-3"/></svg>Tri<span class="legende pl">plus tard</span></button></div><span class="legende lab">L'onglet actif prend le trait accent et le texte en encre. Un onglet pas encore fait reste en encre-pale, suivi de « plus tard ».</span></div>

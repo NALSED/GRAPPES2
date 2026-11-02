@@ -1,0 +1,42 @@
+/* Charte grappes — jetons de style.
+   Source de verite : pilote/charte/tokens.json
+   Aucune couleur, taille, rayon ni ombre ecrite en dur ailleurs dans le code. */
+
+:root {
+  --surface: #FFFFFF;
+  --surface-page: #F2F3F5;
+  --surface-creuse: #F7F8F9;
+  --trait: #E3E5E8;
+  --trait-fort: #868C94;
+  --encre: #1A1C1F;
+  --encre-douce: #5C6168;
+  --encre-pale: #696F78;
+  --accent: #2563A8;
+  --accent-fond: #E8EFF8;
+  --accent-encre: #1F4F85;
+  --sur-accent: #FFFFFF;
+  --etat-ok: #1E7F4F;
+  --etat-ok-fond: #EAF3EC;
+  --etat-ok-encre: #1E6340;
+  --etat-attention: #8A5209;
+  --etat-attention-fond: #FBF0E4;
+  --etat-eteint: #868C94;
+  --etat-eteint-fond: #ECEEF1;
+  --danger: #8A3324;
+  --danger-fond: #FAEFE6;
+  --role-chercher: #1F4F85;        --role-chercher-fond: #E8EFF8;
+  --role-verifier: #1E6340;        --role-verifier-fond: #EAF3EC;
+  --role-enrichir: #5B3E82;        --role-enrichir-fond: #F3EEF8;
+  --role-catalogue: #7A4E12;       --role-catalogue-fond: #FBF0E4;
+  --role-outil: #3E444C;           --role-outil-fond: #ECEEF1;
+  --role-rapprocher: #1F5A61;      --role-rapprocher-fond: #E7F2F3;
+  --rayon-controle: 6px;
+  --rayon-carte: 10px;
+  --rayon-tuile: 14px;
+  --rayon-pilule: 999px;
+  --rayon-rond: 50%;
+  --ombre-posee: 0 1px 2px rgba(20, 22, 26, 0.08);
+  --ombre-carte: 0 1px 3px rgba(20, 22, 26, 0.07);
+  --ombre-panneau: 0 2px 12px rgba(20, 22, 26, 0.10);
+  --ombre-fenetre: 0 12px 40px rgba(20, 22, 26, 0.30);
+}

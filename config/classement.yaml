@@ -1,0 +1,19 @@
+# Classement par l'indice de fiabilité unique (D64, étape 3) : fournisseurs de candidats, indice, calibration, sortie.
+# `actif: false` (défaut) : le cycle ne change rien. `actif: true` : le cycle écrit en plus les profils de `sortie.yaml`
+# issus de ce classement (ex. `resultat_brut.csv`) ; `resultat.csv` et `resultat_tsites.csv` ne changent pas tant que
+# `remplace_resultat` est faux.
+version: 1
+actif: false
+remplace_resultat: false        # vrai : resultat.csv et resultat_tsites.csv sortent du nouveau classement
+fournisseurs:
+  registres: [wikidata, sirene, yaml]   # « yaml » : prises de config/recherche/ (data.gouv.fr, D68). Wikidata est mesurable seulement en dehors des sujets dont la référence en vient (D64)
+  noms: true                      # reconnaissance de noms dans les textes (config/ner.yaml)
+variantes:
+  actif: false                    # D65 : désactivé, le regroupement enchaîne des noms sans rapport (calibration.md § 4)
+  seuil: 0.9
+  lien: complet                   # « complet » : une fusion exige que toutes les paires atteignent le seuil (mesuré meilleur que « simple » sur dev ET validation, DECISIONS 2026-10-18) ; « simple » = historique, enchaîne des noms. Ne sert que si actif: true
+sortie:
+  n_max: 200                      # nombre maximal de lignes rendues (les mieux classées)
+  p_min: 0.0                      # probabilité calibrée minimale pour figurer ; 0 = pas de coupe
+calibration: config/calibration.json
+cache_registres_jours: 30         # une réponse de registre plus vieille est redemandée

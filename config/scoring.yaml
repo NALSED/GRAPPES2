@@ -1,0 +1,42 @@
+# Paramètres globaux. Toutes les valeurs sont initiales, non actées (MISSION §11, Q4).
+top_n_observations: 5      # S(e, g) = moyenne des N meilleurs scores d'observations
+seuil_min: 40.0            # confiance minimale pour porter un cluster_id
+marge_ambiguite: 10.0      # écart minimal avec la 2e grappe
+niveau_confirme: 70.0
+niveau_probable: 40.0
+entity_types:              # type d'entité par écosystème
+  x: person
+  telegram: group
+  web: site
+  instagram: person
+  rss: site          # flux RSS : le média (organisation)
+  wikipedia: group   # article Wikipédia (les articles de personnes physiques ne sont pas ingérés)
+csv:
+  separator: ";"
+  bom: false
+formule_confiance: complementaire   # complementaire (D15) | ponderee (ancienne formule, D12)
+poids_complementaire:      # conf = S + (100 − S)·(c_e·E + c_a·A)/100 ; sans citations, conf = S
+  ecosysteme: 0.6
+  ancrage: 0.4
+poids_confiance:           # formule « ponderee » : conf = w_s·S + w_e·E + w_a·A
+  semantique: 0.50
+  ecosysteme: 0.30
+  ancrage: 0.20
+crossref_floor: 60.0       # plancher de confiance d'un élément validé par recoupement (Q4)
+max_iter: 3                # itérations bornées (anti-circularité)
+crossref:
+  min_citers: 3            # X : sources citantes distinctes (Q4)
+  min_ecosystems: 2
+  min_weight_sum: 3.0
+  min_citer_confidence: 50.0
+  window_days: 180
+contexte_min_citants: null   # entité sans texte propre : null = jamais classée d'après le texte de ses citants (seul le recoupement la classe) ; sinon N citants minimum
+max_fichier_mo: 200        # taille maximale d'un fichier .json (un .jsonl est lu en flux, sans limite) ; null = aucune
+retention_days: 90         # données brutes (observations) conservées 90 jours ; null = illimité (D30)
+redact_persons: true       # entités de type `person` : nom et identifiant masqués dans les sorties (D30)
+resultat:                  # sorties/resultat.csv (une colonne NOM)
+  confiance_min: null      # null = niveau_probable ; entités assignées à une grappe au-dessus de ce seuil
+  inclure_ambigus: false
+  inclure_personnes: false # ATTENTION : à true, les personnes physiques figurent en clair dans resultat.csv
+  # indices_institution: [...]  # mots qui désignent un compte institutionnel (défaut : liste intégrée)
+  suffixes: [officiel, official, channel, chaîne, chaine]   # ignorés pour fusionner les variantes d'un nom

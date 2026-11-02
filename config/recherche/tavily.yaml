@@ -1,0 +1,30 @@
+# Tavily (https://docs.tavily.com/documentation/api-reference/endpoint/search) : POST JSON, jeton Bearer.
+# La clé est dans la variable d'environnement TAVILY_API_KEY, chargée depuis config/secrets.env (hors dépôt,
+# droits 600, ignoré par git). Elle n'est jamais écrite ici ni dans les journaux.
+id: tavily
+type: http
+public: true                       # résultats de recherche web publics ; aucun compte de connexion aux sites visités
+url: https://api.tavily.com/search
+method: POST
+auth: {type: bearer, env: TAVILY_API_KEY}
+body:
+  type: json
+  content:
+    query: "{mots_cles}"
+    topic: news                    # sujet d'actualité (valeurs documentées : general, news, finance)
+    search_depth: basic            # 1 crédit par requête
+    max_results: "{limite}"        # entier, 0 à 20
+    time_range: week
+    include_published_date: true
+    include_answer: false          # aucune réponse générée : seulement des résultats
+    include_raw_content: false
+    include_images: false
+response: {format: json, items: results}
+fields:
+  title: title
+  url: url
+  description: content
+  date: published_date
+  id: id
+quota: 20                          # requêtes au plus par exécution pour ce fournisseur
+raison: "résultat Tavily pour « {mot_cle} »"

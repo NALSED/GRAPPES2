@@ -1,0 +1,45 @@
+# Wikipédia (API MediaWiki publique, sans clé) : https://www.mediawiki.org/wiki/API:Search
+# Écosystème « wikipedia », distinct de « web » (Tavily) : un article cite des sites par ses liens externes, ce
+# qui permet un vrai recoupement entre au moins deux écosystèmes (FINAL.md § 8, Q22).
+# Le résultat EST le document : aucune page n'est récupérée (bloc `observation`). Les articles de personnes
+# physiques ne sont PAS ingérés (catégories biographiques, ou texte « né le... », ou aucune catégorie lisible :
+# en cas de doute, une personne). Wikidata n'est pas branché : sa recherche ne rend que libellé et description.
+id: wikipedia
+type: http
+public: true
+url: https://fr.wikipedia.org/w/api.php
+method: GET
+headers:
+  User-Agent: "grappes-collecte/1 (collecte automatique ; respecte robots.txt)"
+params:
+  action: query
+  format: json
+  formatversion: "2"
+  generator: search
+  gsrsearch: "{mots_cles}"
+  gsrlimit: "{limite}"
+  gsrnamespace: "0"
+  prop: "extracts|extlinks|categories|info"
+  exintro: "1"
+  explaintext: "1"
+  exlimit: max
+  ellimit: max
+  cllimit: max
+  inprop: url
+response: {format: json, items: query.pages}
+fields:
+  title: title
+  url: fullurl
+  description: extract
+  id: pageid
+observation:
+  ecosysteme: wikipedia
+  source: {template: "fr/{title}"}
+  nom: title
+  liens: "extlinks[].url"
+  exclure:
+    - {absent: "categories[].title", motif: "aucune catégorie lisible : en cas de doute, une personne"}
+    - {path: "categories[].title", regex: "^Catégorie:(Naissance |Décès |Date de naissance|Date de décès|Personnalité )", motif: "personne physique (catégorie biographique)"}
+    - {path: extract, regex: "\\b(né|née) (le|en|à) \\d|\\((né|née) ", motif: "personne physique (texte biographique)"}
+quota: 20
+raison: "article Wikipédia pour « {mot_cle} »"

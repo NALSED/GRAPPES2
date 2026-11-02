@@ -1,0 +1,12 @@
+# Planification quotidienne à 10:00, décalage aléatoire jusqu'à 30 min (D60).
+# Autres fréquences : OnCalendar=weekly, Mon *-*-* 03:00, etc.
+[Unit]
+Description=Grappes : planification de la boucle automatique
+
+[Timer]
+OnCalendar=*-*-* 10:00:00
+Persistent=true
+RandomizedDelaySec=30min
+
+[Install]
+WantedBy=timers.target

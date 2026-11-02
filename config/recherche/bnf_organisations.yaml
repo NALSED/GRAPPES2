@@ -1,0 +1,22 @@
+# data.bnf.fr (Bibliothèque nationale de France) : notices d'autorité des collectivités (associations, chorales, troupes,
+# clubs, festivals, sociétés...). Source : catalogue data.gouv.fr, API « SPARQL de la BnF » (id 672cfbeff92a8fae20ccf3ea,
+# sans spécification OpenAPI : point d'accès SPARQL standard). Ne dérive PAS de Wikidata (notices cataloguées par la BnF).
+# Plein texte Virtuoso (`bif:contains`) sur le nom ; mots tirés de la phrase du sujet (voir decouverte/sources_yaml.py).
+id: bnf_organisations
+type: registre
+public: true
+description: "Autorités collectivités de la BnF (data.bnf.fr)"
+url: https://data.bnf.fr/sparql
+format: json
+params:
+  format: application/json
+  query: >-
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    SELECT DISTINCT ?o ?nom WHERE { ?o a foaf:Organization ; foaf:name ?nom .
+    ?nom bif:contains "{requete_et}" } LIMIT 300
+response: {items: results.bindings}
+fields:
+  nom: nom.value
+  id: o.value
+relaxation: 2
+# Pas de type déclaré (la BnF ne dit que foaf:Organization) : le vérificateur de type rend « inconnu » et garde (D69).

@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "id": "17900000000000001",
+      "media_type": "IMAGE",
+      "media_url": "https://instagram.example.test/media/demo_1.jpg",
+      "permalink": "https://www.instagram.com/p/DEMO0001/",
+      "caption": "Potager d'automne avec @compte_demo_a #jardinage https://exemple-a.example.test/articles/jardin-1",
+      "timestamp": "2026-09-02T11:00:00+0000",
+      "username": "compte_demo_c",
+      "like_count": 45,
+      "comments_count": 4,
+      "is_comment_enabled": true
+    },
+    {
+      "id": "17900000000000002",
+      "media_type": "CAROUSEL_ALBUM",
+      "media_url": "https://instagram.example.test/media/demo_2.jpg",
+      "permalink": "https://www.instagram.com/p/DEMO0002/",
+      "timestamp": "2026-09-03T16:20:00+0000",
+      "username": "compte_demo_c",
+      "like_count": 10,
+      "comments_count": 0,
+      "children": {
+        "data": [
+          {"id": "17900000000000003", "media_type": "IMAGE", "media_url": "https://instagram.example.test/media/demo_2a.jpg"},
+          {"id": "17900000000000004", "media_type": "VIDEO", "media_url": "https://instagram.example.test/media/demo_2b.mp4"}
+        ]
+      }
+    },
+    {
+      "id": "17900000000000005",
+      "media_type": "VIDEO",
+      "media_url": "https://instagram.example.test/media/demo_3.mp4",
+      "thumbnail_url": "https://instagram.example.test/media/demo_3_thumb.jpg",
+      "permalink": "https://www.instagram.com/reel/DEMO0003/",
+      "caption": "Տեսանյութ թեստ / видео тест",
+      "timestamp": "2026-09-04T09:00:00+0000",
+      "username": "compte_demo_c",
+      "like_count": 5,
+      "comments_count": 1
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "DEMO_CURSOR_BEFORE",
+      "after": "DEMO_CURSOR_AFTER"
+    },
+    "next": "https://graph.example.test/v1/demo/media?after=DEMO_CURSOR_AFTER"
+  }
+}

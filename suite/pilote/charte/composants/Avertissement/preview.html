@@ -1,0 +1,32 @@
+<!-- @dsCard group="Fenêtres" height=360 subtitle="Ce qu'on lit avant d'allumer quelque chose qu'on pourra regretter" -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;font-family:var(--font-sans);color:var(--encre);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+.fen{width:480px;max-width:100%;background:var(--surface);border-radius:var(--rayon-carte);box-shadow:var(--ombre-fenetre);display:flex;flex-direction:column}
+.tete{display:flex;align-items:center;gap:10px;padding:24px 26px 0}
+.ic{display:inline-flex;flex-shrink:0;color:var(--etat-attention)}
+.pts{padding:16px 26px 0;display:flex;flex-direction:column;gap:10px}
+.pt{display:flex;align-items:flex-start;gap:10px}
+.dot{flex-shrink:0;width:5px;height:5px;margin-top:7px;border-radius:var(--rayon-rond);background:var(--etat-attention)}
+.pt span{color:var(--encre-douce);line-height:1.55}
+.pied{padding:22px 26px 24px;display:flex;align-items:center;gap:10px}
+.b1{height:40px;padding:0 18px;font:inherit;font-size:14px;font-weight:600;color:var(--sur-accent);background:var(--accent);border:1px solid var(--accent);border-radius:var(--rayon-controle);cursor:pointer}
+.b2{height:40px;padding:0 16px;font:inherit;font-size:14px;color:var(--encre);background:var(--surface);border:1px solid var(--trait-fort);border-radius:var(--rayon-controle);cursor:pointer}
+</style>
+<div class="fen">
+  <div class="tete">
+    <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.6L20.8 19.4H3.2L12 4.6zM12 10.2v4.1M12 16.9v.1"/></svg></span>
+    <span class="titre-m">Allumer « Assistant IA » ?</span>
+  </div>
+  <div class="pts">
+    <div class="pt"><span class="dot"></span><span class="corps">Ce que cette tuile produit ne vient d'aucune source : c'est une IA qui l'écrit.</span></div>
+    <div class="pt"><span class="dot"></span><span class="corps">Le résultat peut changer d'un lancement à l'autre, avec la même question et les mêmes données.</span></div>
+    <div class="pt"><span class="dot"></span><span class="corps">Une IA peut écrire quelque chose de faux avec assurance. Rien de ce qu'elle produit ne compte comme un fait vérifié.</span></div>
+    <div class="pt"><span class="dot"></span><span class="corps">Tout ce qui sort de cette tuile est marqué « IA » dans la grappe, et le reste à chaque étape.</span></div>
+  </div>
+  <div class="pied">
+    <button class="b1" type="button">Allumer</button>
+    <button class="b2" type="button">Annuler</button>
+  </div>
+</div>

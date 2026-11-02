@@ -1,0 +1,31 @@
+# Registres officiels d'État (DECISION_Q24.md § 3). Une correspondance ACTIVE place une source en fiabilité A (Admiralty).
+# Ce n'est pas une validation de l'appartenance à un sujet : voir DECISIONS.md D51. Le recoupement sur au moins deux
+# écosystèmes reste obligatoire dans tous les cas.
+# Interrogation prudente : réponses mises en cache (base de données), au plus `max_requetes_par_cycle` requêtes par
+# cycle, jamais en boucle ; chaque appel est journalisé. APIs publiques, sans clé.
+version: 1
+cache_jours: 30
+max_requetes_par_cycle: 30
+
+registres:
+  enseignement_superieur:
+    nom: "Principaux établissements d'enseignement supérieur (ministère de l'Enseignement supérieur, données ouvertes)"
+    methode: domaines            # correspondance sur le DOMAINE du site officiel de l'établissement
+    url: https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-principaux-etablissements-enseignement-superieur/records
+    params: {limit: 100}
+    pagination: {param: offset, pas: 100, max_pages: 5}
+    items: results
+    champ_url: url               # site officiel de l'établissement
+    champ_ville: com_nom         # commune de l'établissement (colonne `ville` de resultat_tsites.csv)
+    pays: FR
+  sirene_rna:
+    nom: "Annuaire des entreprises : SIRENE (entreprises) et RNA (associations)"
+    methode: nom                 # égalité EXACTE du nom normalisé, organisme ACTIF, un seul résultat
+    url: https://recherche-entreprises.api.gouv.fr/search
+    params: {q: "{nom}", per_page: 10}
+    items: results
+    champs_nom: [nom_complet, nom_raison_sociale]
+    etat: {path: etat_administratif, valeur: A}     # A = actif
+    identifiant: [complements.identifiant_association, siren]   # RNA (W...) sinon SIREN
+    champ_ville: siege.libelle_commune   # commune du siège (colonne `ville` de resultat_tsites.csv)
+    pays: FR

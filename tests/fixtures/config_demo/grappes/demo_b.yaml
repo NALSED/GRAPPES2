@@ -1,0 +1,13 @@
+id: G-DEMO-B
+label: "Grappe de démonstration B (jardinage)"
+scale: 3.0
+lexicon:
+  terms:
+    "potager": 1.0
+    "semis": 1.0
+    "tomates": 1.0
+    "#jardinage": 1.5
+anchors:
+  - "x:jardin_demo"
+oppositions:
+  - "G-DEMO-A"
